@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SARR Incorporation · Premium Digital Agency</title>
+    <title>SARR Incorporation · 3D Premium Digital Agency</title>
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -13,6 +13,14 @@
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- Three.js -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
+            }
+        }
+    </script>
     <style>
         * {
             margin: 0;
@@ -30,11 +38,10 @@
             color: #fff;
             overflow-x: hidden;
             line-height: 1.6;
-            perspective: 2000px;
         }
         
-        /* Premium 3D Background Container */
-        .premium-bg {
+        /* Three.js Canvas Container */
+        #canvas-container {
             position: fixed;
             top: 0;
             left: 0;
@@ -42,223 +49,21 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-            overflow: hidden;
-            perspective: 2000px;
-            transform-style: preserve-3d;
         }
         
-        /* Continuous Moving Orbs */
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            will-change: transform;
-            opacity: 0.4;
-        }
-        
-        /* Main Center Circle - Continuously Moving */
-        .center-circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 50vmin;
-            height: 50vmin;
-            background: radial-gradient(circle at 30% 30%, #0ef, #a05eff, #ff5ea0);
-            border-radius: 50%;
-            filter: blur(40px);
-            opacity: 0.5;
-            animation: centerPulse 8s ease-in-out infinite, centerOrbit 25s linear infinite;
-            transform-style: preserve-3d;
-        }
-        
-        /* Center Circle Glow */
-        .center-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 80vmin;
-            height: 80vmin;
-            background: radial-gradient(circle at center, rgba(0, 255, 255, 0.3), transparent 70%);
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.3;
-            animation: centerGlow 6s ease-in-out infinite, centerOrbitReverse 30s linear infinite;
-            transform-style: preserve-3d;
-        }
-        
-        /* Floating Glass Cards */
-        .bg-glass-card {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 90vmax;
-            height: 90vmax;
-            background: radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.25), rgba(160, 94, 255, 0.15) 70%);
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            transform-style: preserve-3d;
-            animation: floatContinuous1 40s linear infinite;
-            filter: blur(70px);
-        }
-        
-        .bg-glass-card-2 {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 110vmax;
-            height: 110vmax;
-            background: conic-gradient(from 90deg at 50% 50%, #0ef 0deg, #a05eff 120deg, #ff5ea0 240deg, #0ef 360deg);
-            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-            transform-style: preserve-3d;
-            animation: floatContinuous2 50s linear infinite;
-            filter: blur(80px);
-            opacity: 0.25;
-        }
-        
-        .bg-glass-card-3 {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 130vmax;
-            height: 130vmax;
-            background: radial-gradient(circle at 70% 60%, rgba(255, 100, 200, 0.2), rgba(0, 200, 255, 0.2) 70%);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            transform-style: preserve-3d;
-            animation: floatContinuous3 60s linear infinite;
-            filter: blur(90px);
-            opacity: 0.2;
-        }
-        
-        /* Floating Particles - Continuous */
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: rgba(0, 255, 255, 0.7);
-            border-radius: 50%;
-            filter: blur(2px);
-            animation: particleFloat 15s linear infinite;
-        }
-        
-        /* Light Streaks - Continuous */
-        .light-streak {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, transparent 30%, rgba(0, 255, 255, 0.03) 70%);
-            animation: streakRotate 40s linear infinite;
-        }
-        
-        .light-streak-2 {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, transparent 30%, rgba(160, 94, 255, 0.03) 70%);
-            animation: streakRotateReverse 55s linear infinite;
-        }
-        
-        /* Continuous Animation Keyframes */
-        @keyframes floatContinuous1 {
-            0% { transform: translate(-50%, -50%) translateZ(-300px) rotate(0deg) scale(1); }
-            25% { transform: translate(-50%, -50%) translateZ(-400px) rotate(90deg) scale(1.2); }
-            50% { transform: translate(-50%, -50%) translateZ(-200px) rotate(180deg) scale(0.9); }
-            75% { transform: translate(-50%, -50%) translateZ(-500px) rotate(270deg) scale(1.1); }
-            100% { transform: translate(-50%, -50%) translateZ(-300px) rotate(360deg) scale(1); }
-        }
-        
-        @keyframes floatContinuous2 {
-            0% { transform: translate(-50%, -50%) translateZ(-500px) rotate(0deg) scale(1); }
-            33% { transform: translate(-50%, -50%) translateZ(-300px) rotate(-120deg) scale(1.3); }
-            66% { transform: translate(-50%, -50%) translateZ(-700px) rotate(-240deg) scale(0.8); }
-            100% { transform: translate(-50%, -50%) translateZ(-500px) rotate(-360deg) scale(1); }
-        }
-        
-        @keyframes floatContinuous3 {
-            0% { transform: translate(-50%, -50%) translateZ(100px) rotate(0deg) scale(1); }
-            20% { transform: translate(-50%, -50%) translateZ(200px) rotate(72deg) scale(1.1); }
-            40% { transform: translate(-50%, -50%) translateZ(-100px) rotate(144deg) scale(0.9); }
-            60% { transform: translate(-50%, -50%) translateZ(300px) rotate(216deg) scale(1.2); }
-            80% { transform: translate(-50%, -50%) translateZ(0px) rotate(288deg) scale(0.95); }
-            100% { transform: translate(-50%, -50%) translateZ(100px) rotate(360deg) scale(1); }
-        }
-        
-        @keyframes centerPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.7; }
-        }
-        
-        @keyframes centerOrbit {
-            0% { transform: translate(-50%, -50%) translateX(0) translateY(0) rotate(0deg); }
-            25% { transform: translate(-50%, -50%) translateX(150px) translateY(-150px) rotate(90deg); }
-            50% { transform: translate(-50%, -50%) translateX(0) translateY(-200px) rotate(180deg); }
-            75% { transform: translate(-50%, -50%) translateX(-150px) translateY(-150px) rotate(270deg); }
-            100% { transform: translate(-50%, -50%) translateX(0) translateY(0) rotate(360deg); }
-        }
-        
-        @keyframes centerOrbitReverse {
-            0% { transform: translate(-50%, -50%) translateX(0) translateY(0) rotate(0deg); }
-            25% { transform: translate(-50%, -50%) translateX(-100px) translateY(100px) rotate(-90deg); }
-            50% { transform: translate(-50%, -50%) translateX(0) translateY(150px) rotate(-180deg); }
-            75% { transform: translate(-50%, -50%) translateX(100px) translateY(100px) rotate(-270deg); }
-            100% { transform: translate(-50%, -50%) translateX(0) translateY(0) rotate(-360deg); }
-        }
-        
-        @keyframes centerGlow {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
-            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.5; }
-        }
-        
-        @keyframes particleFloat {
-            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.7; }
-            90% { opacity: 0.7; }
-            100% { transform: translateY(-100vh) translateX(100px) rotate(360deg); opacity: 0; }
-        }
-        
-        @keyframes streakRotate {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        
-        @keyframes streakRotateReverse {
-            from { transform: translate(-50%, -50%) rotate(360deg); }
-            to { transform: translate(-50%, -50%) rotate(0deg); }
-        }
-        
-        /* YouTube Video Background */
-        #video-bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-        
-        #video-bg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100vw;
-            height: 56.25vw;
-            min-height: 100vh;
-            min-width: 177.77vh;
-            opacity: 0.1;
-            pointer-events: none;
-        }
-        
+        /* Video Overlay (subtle) */
         #video-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, #0a0c15 90%);
-            z-index: -1;
+            background: radial-gradient(circle at center, transparent 0%, #0a0c15 80%);
+            z-index: 1;
+            pointer-events: none;
         }
         
-        /* Main Content - Above Background */
+        /* Main Content - Above 3D Background */
         .content {
             position: relative;
             z-index: 10;
@@ -271,12 +76,12 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 5%;
-            background: rgba(10, 12, 21, 0.95);
+            background: rgba(10, 12, 21, 0.8);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 255, 255, 0.2);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         
@@ -764,18 +569,6 @@
             section {
                 padding: 3rem 4%;
             }
-            
-            .bg-glass-card,
-            .bg-glass-card-2,
-            .bg-glass-card-3 {
-                filter: blur(40px);
-                opacity: 0.15;
-            }
-            
-            .center-circle {
-                width: 70vmin;
-                height: 70vmin;
-            }
         }
         
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -788,47 +581,8 @@
     </style>
 </head>
 <body>
-    <!-- Premium Continuous Moving Background -->
-    <div class="premium-bg">
-        <!-- Continuously Moving Center Circle with Glow -->
-        <div class="center-circle"></div>
-        <div class="center-glow"></div>
-        
-        <!-- Floating Glass Cards - Continuous Motion -->
-        <div class="bg-glass-card"></div>
-        <div class="bg-glass-card-2"></div>
-        <div class="bg-glass-card-3"></div>
-        
-        <!-- Floating Particles - Endless Stream -->
-        <div class="particle" style="top: -10%; left: 20%; animation-delay: 0s;"></div>
-        <div class="particle" style="top: -10%; left: 80%; animation-delay: 2s;"></div>
-        <div class="particle" style="top: -10%; left: 40%; animation-delay: 4s;"></div>
-        <div class="particle" style="top: -10%; left: 60%; animation-delay: 6s;"></div>
-        <div class="particle" style="top: -10%; left: 10%; animation-delay: 8s;"></div>
-        <div class="particle" style="top: -10%; left: 90%; animation-delay: 10s;"></div>
-        <div class="particle" style="top: -10%; left: 30%; animation-delay: 12s;"></div>
-        <div class="particle" style="top: -10%; left: 70%; animation-delay: 14s;"></div>
-        <div class="particle" style="top: -10%; left: 50%; animation-delay: 16s;"></div>
-        <div class="particle" style="top: -10%; left: 15%; animation-delay: 18s;"></div>
-        <div class="particle" style="top: -10%; left: 85%; animation-delay: 20s;"></div>
-        <div class="particle" style="top: -10%; left: 35%; animation-delay: 22s;"></div>
-        <div class="particle" style="top: -10%; left: 65%; animation-delay: 24s;"></div>
-        <div class="particle" style="top: -10%; left: 45%; animation-delay: 26s;"></div>
-        <div class="particle" style="top: -10%; left: 55%; animation-delay: 28s;"></div>
-        
-        <!-- Light Streaks - Continuous Rotation -->
-        <div class="light-streak" style="top: 50%; left: 50%;"></div>
-        <div class="light-streak-2" style="top: 50%; left: 50%;"></div>
-    </div>
-
-    <!-- YouTube Background Video -->
-    <div id="video-bg-container">
-        <iframe id="video-bg" 
-                src="https://www.youtube.com/embed/7q2XK3dE8uA?autoplay=1&mute=1&loop=1&playlist=7q2XK3dE8uA&controls=0&showinfo=0&modestbranding=1&iv_load_policy=3&rel=0" 
-                frameborder="0" 
-                allow="autoplay; encrypted-media">
-        </iframe>
-    </div>
+    <!-- Three.js Canvas Container -->
+    <div id="canvas-container"></div>
     <div id="video-overlay"></div>
 
     <!-- Main Content -->
@@ -1246,7 +1000,7 @@
         <i class="fas fa-check-circle"></i> <span id="toastMessage">Thank you for your rating!</span>
     </div>
 
-    <script>
+    <script type="module">
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBHPUNdVvUcZZ9XgvtP6M4glcgZPCEoSEc",
@@ -1266,6 +1020,207 @@
         } catch (error) {
             console.warn("Firebase init failed:", error);
         }
+
+        // Three.js 3D Background
+        import * as THREE from 'three';
+        
+        // Setup scene, camera, renderer
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0c15);
+        
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 15;
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        
+        // Add fog for depth
+        scene.fog = new THREE.FogExp2(0x0a0c15, 0.02);
+        
+        // Create floating geometric shapes
+        
+        // 1. Large central torus knot (glass-like)
+        const knotGeometry = new THREE.TorusKnotGeometry(2, 0.6, 200, 32);
+        const knotMaterial = new THREE.MeshPhongMaterial({
+            color: 0x00aaff,
+            emissive: 0x112244,
+            shininess: 60,
+            transparent: true,
+            opacity: 0.3,
+            wireframe: true
+        });
+        const knot = new THREE.Mesh(knotGeometry, knotMaterial);
+        knot.position.set(0, 0, 0);
+        scene.add(knot);
+        
+        // 2. Floating spheres
+        const sphereGroup = new THREE.Group();
+        const sphereCount = 50;
+        const sphereGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+        
+        for (let i = 0; i < sphereCount; i++) {
+            const material = new THREE.MeshStandardMaterial({
+                color: Math.random() * 0xffffff,
+                emissive: 0x224466,
+                roughness: 0.2,
+                metalness: 0.1,
+                transparent: true,
+                opacity: 0.4
+            });
+            const sphere = new THREE.Mesh(sphereGeometry, material);
+            
+            // Random positions in a spherical shell
+            const radius = 5 + Math.random() * 5;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            
+            sphere.position.x = radius * Math.sin(phi) * Math.cos(theta);
+            sphere.position.y = radius * Math.sin(phi) * Math.sin(theta);
+            sphere.position.z = radius * Math.cos(phi);
+            
+            sphere.userData = {
+                speed: 0.001 + Math.random() * 0.002,
+                axis: new THREE.Vector3(Math.random(), Math.random(), Math.random()).normalize(),
+                radius: radius,
+                angle: theta,
+                phi: phi
+            };
+            
+            sphereGroup.add(sphere);
+        }
+        scene.add(sphereGroup);
+        
+        // 3. Floating rings
+        const ringGroup = new THREE.Group();
+        const ringCount = 15;
+        
+        for (let i = 0; i < ringCount; i++) {
+            const ringGeometry = new THREE.TorusGeometry(1 + i * 0.3, 0.03, 16, 100);
+            const ringMaterial = new THREE.MeshStandardMaterial({
+                color: 0x44aaff,
+                emissive: 0x113366,
+                transparent: true,
+                opacity: 0.1 + i * 0.02,
+                side: THREE.DoubleSide
+            });
+            const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+            
+            ring.rotation.x = Math.random() * Math.PI;
+            ring.rotation.y = Math.random() * Math.PI;
+            
+            ring.userData = {
+                speedX: 0.001 * (Math.random() - 0.5),
+                speedY: 0.001 * (Math.random() - 0.5),
+                speedZ: 0.001 * (Math.random() - 0.5)
+            };
+            
+            ringGroup.add(ring);
+        }
+        scene.add(ringGroup);
+        
+        // 4. Particles (stars)
+        const particleCount = 2000;
+        const particleGeometry = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        const particleColors = new Float32Array(particleCount * 3);
+        
+        for (let i = 0; i < particleCount; i++) {
+            // Position
+            particlePositions[i*3] = (Math.random() - 0.5) * 50;
+            particlePositions[i*3+1] = (Math.random() - 0.5) * 50;
+            particlePositions[i*3+2] = (Math.random() - 0.5) * 50;
+            
+            // Color (cyan/purple/blue tones)
+            const color = new THREE.Color().setHSL(0.6 + Math.random() * 0.3, 0.8, 0.5 + Math.random() * 0.3);
+            particleColors[i*3] = color.r;
+            particleColors[i*3+1] = color.g;
+            particleColors[i*3+2] = color.b;
+        }
+        
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+        
+        const particleMaterial = new THREE.PointsMaterial({
+            size: 0.1,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+        
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404060);
+        scene.add(ambientLight);
+        
+        const pointLight1 = new THREE.PointLight(0x44aaff, 1, 30);
+        pointLight1.position.set(5, 5, 5);
+        scene.add(pointLight1);
+        
+        const pointLight2 = new THREE.PointLight(0xff44aa, 0.8, 30);
+        pointLight2.position.set(-5, -3, 5);
+        scene.add(pointLight2);
+        
+        const pointLight3 = new THREE.PointLight(0xaaff44, 0.5, 30);
+        pointLight3.position.set(3, -5, -5);
+        scene.add(pointLight3);
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Rotate central knot
+            knot.rotation.x += 0.002;
+            knot.rotation.y += 0.003;
+            
+            // Rotate spheres in orbit
+            sphereGroup.children.forEach(sphere => {
+                sphere.position.x = sphere.userData.radius * Math.sin(sphere.userData.angle) * Math.cos(sphere.userData.phi);
+                sphere.position.y = sphere.userData.radius * Math.sin(sphere.userData.angle) * Math.sin(sphere.userData.phi);
+                sphere.position.z = sphere.userData.radius * Math.cos(sphere.userData.angle);
+                
+                sphere.userData.angle += sphere.userData.speed;
+            });
+            
+            // Rotate rings
+            ringGroup.rotation.x += 0.001;
+            ringGroup.rotation.y += 0.002;
+            
+            // Rotate particles
+            particles.rotation.y += 0.0002;
+            
+            // Subtle camera movement based on mouse
+            // (we'll add this later with mouse move event)
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // Mouse movement effect for parallax
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+            
+            // Subtle camera movement
+            camera.position.x += (mouseX * 2 - camera.position.x) * 0.02;
+            camera.position.y += (-mouseY * 2 - camera.position.y) * 0.02;
+            camera.lookAt(scene.position);
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
 
         // Show notification function
         function showNotification(message, isSuccess = true) {
