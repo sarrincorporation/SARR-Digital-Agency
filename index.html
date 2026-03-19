@@ -279,10 +279,15 @@
             letter-spacing: 2px;
         }
         
-        .google-image {
+        .jpeg-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .portfolio-item:hover .jpeg-image {
+            transform: scale(1.1);
         }
         
         /* testimonials with rating */
@@ -433,7 +438,7 @@
     <!-- YouTube Video Background -->
     <div id="video-bg-container">
         <div class="youtube-bg">
-            <!-- Replace with your favorite YouTube video ID -->
+            <!-- Cinematic background video -->
             <iframe src="https://www.youtube.com/embed/2g811Eo7K8U?autoplay=1&mute=1&loop=1&playlist=2g811Eo7K8U&controls=0&showinfo=0&modestbranding=1&iv_load_policy=3&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
         <div id="video-overlay"></div>
@@ -628,7 +633,7 @@
                 <button class="category-btn" data-category="ads">CGI Ads</button>
             </div>
             
-            <!-- Portfolio Grid with YouTube Videos & Google Images -->
+            <!-- Portfolio Grid with YouTube Videos & JPEG Images -->
             <div class="portfolio-grid" id="portfolioGrid">
                 <!-- 3D Category -->
                 <div class="portfolio-item glass-panel" data-category="3d">
@@ -647,9 +652,9 @@
                     </div>
                 </div>
                 
-                <!-- Design Category - Google Images -->
+                <!-- Design Category - JPEG Images -->
                 <div class="portfolio-item glass-panel" data-category="design">
-                    <img class="google-image" src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=600" alt="Graphic Design">
+                    <img class="jpeg-image" src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Graphic Design">
                     <div class="portfolio-content">
                         <span class="category">Brand Identity</span>
                         <h3>Luxury Brand Package</h3>
@@ -657,7 +662,7 @@
                 </div>
                 
                 <div class="portfolio-item glass-panel" data-category="design">
-                    <img class="google-image" src="https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600" alt="Menu Design">
+                    <img class="jpeg-image" src="https://images.pexels.com/photos/3768916/pexels-photo-3768916.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Menu Design">
                     <div class="portfolio-content">
                         <span class="category">Menu Design</span>
                         <h3>Restaurant Menu</h3>
@@ -665,7 +670,7 @@
                 </div>
                 
                 <div class="portfolio-item glass-panel" data-category="design">
-                    <img class="google-image" src="https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=600" alt="Logo Design">
+                    <img class="jpeg-image" src="https://images.pexels.com/photos/57690/pexels-photo-57690.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Logo Design">
                     <div class="portfolio-content">
                         <span class="category">Logo Design</span>
                         <h3>Tech Startup Logo</h3>
@@ -673,7 +678,7 @@
                 </div>
                 
                 <div class="portfolio-item glass-panel" data-category="design">
-                    <img class="google-image" src="https://images.unsplash.com/photo-1542744095-291d1f67b221?w=600" alt="Flyer Design">
+                    <img class="jpeg-image" src="https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Flyer Design">
                     <div class="portfolio-content">
                         <span class="category">Flyer Design</span>
                         <h3>Event Promotion</h3>
@@ -682,7 +687,7 @@
                 
                 <!-- Video Category -->
                 <div class="portfolio-item glass-panel" data-category="video">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&mute=1&loop=1&playlist=dQw4w9WgXcQ&controls=0&showinfo=0" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/jNQXAC9IVRw?autoplay=0&mute=1&loop=1&playlist=jNQXAC9IVRw&controls=0&showinfo=0" allowfullscreen></iframe>
                     <div class="portfolio-content">
                         <span class="category">Documentary</span>
                         <h3>Short Documentary Edit</h3>
@@ -690,16 +695,16 @@
                 </div>
                 
                 <div class="portfolio-item glass-panel" data-category="video">
-                    <iframe src="https://www.youtube.com/embed/jNQXAC9IVRw?autoplay=0&mute=1&loop=1&playlist=jNQXAC9IVRw&controls=0&showinfo=0" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&mute=1&loop=1&playlist=dQw4w9WgXcQ&controls=0&showinfo=0" allowfullscreen></iframe>
                     <div class="portfolio-content">
                         <span class="category">AI Video</span>
                         <h3>AI Generated Video</h3>
                     </div>
                 </div>
                 
-                <!-- Web Dev Category -->
+                <!-- Web Dev Category - JPEG Images -->
                 <div class="portfolio-item glass-panel" data-category="web">
-                    <img class="google-image" src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=600" alt="Web Development">
+                    <img class="jpeg-image" src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Web Development">
                     <div class="portfolio-content">
                         <span class="category">Web Design</span>
                         <h3>E-commerce Platform</h3>
@@ -707,7 +712,7 @@
                 </div>
                 
                 <div class="portfolio-item glass-panel" data-category="web">
-                    <img class="google-image" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600" alt="App Development">
+                    <img class="jpeg-image" src="https://images.pexels.com/photos/57690/pexels-photo-57690.jpeg?auto=compress&cs=tinysrgb&w=600" alt="App Development">
                     <div class="portfolio-content">
                         <span class="category">Mobile App</span>
                         <h3>Fitness App UI</h3>
@@ -739,7 +744,7 @@
             <div class="testimonials-grid">
                 <div class="testi-card glass-panel">
                     <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
-                        <img class="client-avatar" src="https://images.unsplash.com/photo-1494790108777-466fd6c6a5e3?w=100" alt="Client">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Client">
                         <div>
                             <h4>Sarah Johnson</h4>
                             <p style="opacity: 0.7;">CEO, TechStart</p>
@@ -754,7 +759,7 @@
                 
                 <div class="testi-card glass-panel">
                     <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
-                        <img class="client-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="Client">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Client">
                         <div>
                             <h4>Michael Chen</h4>
                             <p style="opacity: 0.7;">Marketing Director</p>
@@ -769,7 +774,7 @@
                 
                 <div class="testi-card glass-panel">
                     <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
-                        <img class="client-avatar" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=100" alt="Client">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Client">
                         <div>
                             <h4>Emma Rodriguez</h4>
                             <p style="opacity: 0.7;">Restaurant Owner</p>
@@ -784,7 +789,7 @@
                 
                 <div class="testi-card glass-panel">
                     <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
-                        <img class="client-avatar" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100" alt="Client">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Client">
                         <div>
                             <h4>David Kim</h4>
                             <p style="opacity: 0.7;">Game Developer</p>
