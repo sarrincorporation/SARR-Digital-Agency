@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>SARR Incorporation · Digital Agency</title>
+    <title>SARR Incorporation · Premium Digital Agency</title>
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- GSAP for smooth animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -27,6 +30,198 @@
             color: #fff;
             overflow-x: hidden;
             line-height: 1.6;
+            perspective: 2000px;
+        }
+        
+        /* Premium 3D Background Container */
+        .premium-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            perspective: 2000px;
+            transform-style: preserve-3d;
+        }
+        
+        /* Continuous Moving Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            will-change: transform;
+            opacity: 0.4;
+        }
+        
+        /* Main Center Circle - Continuously Moving */
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50vmin;
+            height: 50vmin;
+            background: radial-gradient(circle at 30% 30%, #0ef, #a05eff, #ff5ea0);
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.5;
+            animation: centerPulse 8s ease-in-out infinite, centerOrbit 25s linear infinite;
+            transform-style: preserve-3d;
+        }
+        
+        /* Center Circle Glow */
+        .center-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80vmin;
+            height: 80vmin;
+            background: radial-gradient(circle at center, rgba(0, 255, 255, 0.3), transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.3;
+            animation: centerGlow 6s ease-in-out infinite, centerOrbitReverse 30s linear infinite;
+            transform-style: preserve-3d;
+        }
+        
+        /* Floating Glass Cards */
+        .bg-glass-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 90vmax;
+            height: 90vmax;
+            background: radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.25), rgba(160, 94, 255, 0.15) 70%);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            transform-style: preserve-3d;
+            animation: floatContinuous1 40s linear infinite;
+            filter: blur(70px);
+        }
+        
+        .bg-glass-card-2 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 110vmax;
+            height: 110vmax;
+            background: conic-gradient(from 90deg at 50% 50%, #0ef 0deg, #a05eff 120deg, #ff5ea0 240deg, #0ef 360deg);
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            transform-style: preserve-3d;
+            animation: floatContinuous2 50s linear infinite;
+            filter: blur(80px);
+            opacity: 0.25;
+        }
+        
+        .bg-glass-card-3 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 130vmax;
+            height: 130vmax;
+            background: radial-gradient(circle at 70% 60%, rgba(255, 100, 200, 0.2), rgba(0, 200, 255, 0.2) 70%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform-style: preserve-3d;
+            animation: floatContinuous3 60s linear infinite;
+            filter: blur(90px);
+            opacity: 0.2;
+        }
+        
+        /* Floating Particles - Continuous */
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(0, 255, 255, 0.7);
+            border-radius: 50%;
+            filter: blur(2px);
+            animation: particleFloat 15s linear infinite;
+        }
+        
+        /* Light Streaks - Continuous */
+        .light-streak {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, transparent 30%, rgba(0, 255, 255, 0.03) 70%);
+            animation: streakRotate 40s linear infinite;
+        }
+        
+        .light-streak-2 {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, transparent 30%, rgba(160, 94, 255, 0.03) 70%);
+            animation: streakRotateReverse 55s linear infinite;
+        }
+        
+        /* Continuous Animation Keyframes */
+        @keyframes floatContinuous1 {
+            0% { transform: translate(-50%, -50%) translateZ(-300px) rotate(0deg) scale(1); }
+            25% { transform: translate(-50%, -50%) translateZ(-400px) rotate(90deg) scale(1.2); }
+            50% { transform: translate(-50%, -50%) translateZ(-200px) rotate(180deg) scale(0.9); }
+            75% { transform: translate(-50%, -50%) translateZ(-500px) rotate(270deg) scale(1.1); }
+            100% { transform: translate(-50%, -50%) translateZ(-300px) rotate(360deg) scale(1); }
+        }
+        
+        @keyframes floatContinuous2 {
+            0% { transform: translate(-50%, -50%) translateZ(-500px) rotate(0deg) scale(1); }
+            33% { transform: translate(-50%, -50%) translateZ(-300px) rotate(-120deg) scale(1.3); }
+            66% { transform: translate(-50%, -50%) translateZ(-700px) rotate(-240deg) scale(0.8); }
+            100% { transform: translate(-50%, -50%) translateZ(-500px) rotate(-360deg) scale(1); }
+        }
+        
+        @keyframes floatContinuous3 {
+            0% { transform: translate(-50%, -50%) translateZ(100px) rotate(0deg) scale(1); }
+            20% { transform: translate(-50%, -50%) translateZ(200px) rotate(72deg) scale(1.1); }
+            40% { transform: translate(-50%, -50%) translateZ(-100px) rotate(144deg) scale(0.9); }
+            60% { transform: translate(-50%, -50%) translateZ(300px) rotate(216deg) scale(1.2); }
+            80% { transform: translate(-50%, -50%) translateZ(0px) rotate(288deg) scale(0.95); }
+            100% { transform: translate(-50%, -50%) translateZ(100px) rotate(360deg) scale(1); }
+        }
+        
+        @keyframes centerPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.7; }
+        }
+        
+        @keyframes centerOrbit {
+            0% { transform: translate(-50%, -50%) translateX(0) translateY(0) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) translateX(150px) translateY(-150px) rotate(90deg); }
+            50% { transform: translate(-50%, -50%) translateX(0) translateY(-200px) rotate(180deg); }
+            75% { transform: translate(-50%, -50%) translateX(-150px) translateY(-150px) rotate(270deg); }
+            100% { transform: translate(-50%, -50%) translateX(0) translateY(0) rotate(360deg); }
+        }
+        
+        @keyframes centerOrbitReverse {
+            0% { transform: translate(-50%, -50%) translateX(0) translateY(0) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) translateX(-100px) translateY(100px) rotate(-90deg); }
+            50% { transform: translate(-50%, -50%) translateX(0) translateY(150px) rotate(-180deg); }
+            75% { transform: translate(-50%, -50%) translateX(100px) translateY(100px) rotate(-270deg); }
+            100% { transform: translate(-50%, -50%) translateX(0) translateY(0) rotate(-360deg); }
+        }
+        
+        @keyframes centerGlow {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.5; }
+        }
+        
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100vh) translateX(100px) rotate(360deg); opacity: 0; }
+        }
+        
+        @keyframes streakRotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        @keyframes streakRotateReverse {
+            from { transform: translate(-50%, -50%) rotate(360deg); }
+            to { transform: translate(-50%, -50%) rotate(0deg); }
         }
         
         /* YouTube Video Background */
@@ -49,7 +244,7 @@
             height: 56.25vw;
             min-height: 100vh;
             min-width: 177.77vh;
-            opacity: 0.15;
+            opacity: 0.1;
             pointer-events: none;
         }
         
@@ -61,6 +256,13 @@
             height: 100%;
             background: radial-gradient(circle at center, transparent 0%, #0a0c15 90%);
             z-index: -1;
+        }
+        
+        /* Main Content - Above Background */
+        .content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
         }
         
         /* Navigation */
@@ -481,24 +683,21 @@
             border-top: 1px solid rgba(0, 255, 255, 0.1);
         }
         
-        .social-links {
-            margin-top: 2rem;
-            font-size: 1.8rem;
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 255, 0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid #0ef;
+            margin: 2rem auto;
             flex-wrap: wrap;
+            justify-content: center;
         }
         
-        .social-links i {
-            transition: 0.3s;
-            cursor: pointer;
-            color: #fff;
-        }
-        
-        .social-links i:hover {
-            color: #0ef;
-            transform: translateY(-3px);
+        .rating-badge i {
+            color: #ffd700;
         }
         
         /* Notification Toast */
@@ -565,6 +764,18 @@
             section {
                 padding: 3rem 4%;
             }
+            
+            .bg-glass-card,
+            .bg-glass-card-2,
+            .bg-glass-card-3 {
+                filter: blur(40px);
+                opacity: 0.15;
+            }
+            
+            .center-circle {
+                width: 70vmin;
+                height: 70vmin;
+            }
         }
         
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -577,6 +788,39 @@
     </style>
 </head>
 <body>
+    <!-- Premium Continuous Moving Background -->
+    <div class="premium-bg">
+        <!-- Continuously Moving Center Circle with Glow -->
+        <div class="center-circle"></div>
+        <div class="center-glow"></div>
+        
+        <!-- Floating Glass Cards - Continuous Motion -->
+        <div class="bg-glass-card"></div>
+        <div class="bg-glass-card-2"></div>
+        <div class="bg-glass-card-3"></div>
+        
+        <!-- Floating Particles - Endless Stream -->
+        <div class="particle" style="top: -10%; left: 20%; animation-delay: 0s;"></div>
+        <div class="particle" style="top: -10%; left: 80%; animation-delay: 2s;"></div>
+        <div class="particle" style="top: -10%; left: 40%; animation-delay: 4s;"></div>
+        <div class="particle" style="top: -10%; left: 60%; animation-delay: 6s;"></div>
+        <div class="particle" style="top: -10%; left: 10%; animation-delay: 8s;"></div>
+        <div class="particle" style="top: -10%; left: 90%; animation-delay: 10s;"></div>
+        <div class="particle" style="top: -10%; left: 30%; animation-delay: 12s;"></div>
+        <div class="particle" style="top: -10%; left: 70%; animation-delay: 14s;"></div>
+        <div class="particle" style="top: -10%; left: 50%; animation-delay: 16s;"></div>
+        <div class="particle" style="top: -10%; left: 15%; animation-delay: 18s;"></div>
+        <div class="particle" style="top: -10%; left: 85%; animation-delay: 20s;"></div>
+        <div class="particle" style="top: -10%; left: 35%; animation-delay: 22s;"></div>
+        <div class="particle" style="top: -10%; left: 65%; animation-delay: 24s;"></div>
+        <div class="particle" style="top: -10%; left: 45%; animation-delay: 26s;"></div>
+        <div class="particle" style="top: -10%; left: 55%; animation-delay: 28s;"></div>
+        
+        <!-- Light Streaks - Continuous Rotation -->
+        <div class="light-streak" style="top: 50%; left: 50%;"></div>
+        <div class="light-streak-2" style="top: 50%; left: 50%;"></div>
+    </div>
+
     <!-- YouTube Background Video -->
     <div id="video-bg-container">
         <iframe id="video-bg" 
@@ -587,419 +831,415 @@
     </div>
     <div id="video-overlay"></div>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="logo">SARR <span>Incorporation</span>™</div>
-        <div class="nav-links">
-            <a href="#home">Home</a>
-            <a href="#services">Services</a>
-            <a href="#portfolio">Portfolio</a>
-            <a href="#testimonials">Testimonials</a>
-            <a href="#rate">Rate Us</a>
-        </div>
-        <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
-    </nav>
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="logo">SARR <span>Incorporation</span>™</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#services">Services</a>
+                <a href="#portfolio">Portfolio</a>
+                <a href="#testimonials">Testimonials</a>
+                <a href="#rate">Rate Us</a>
+            </div>
+            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+        </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Forge <span class="gradient-text">The Future</span><br>With SARR</h1>
-            <p>Premium digital agency offering 30+ creative services. 4.7★ rating from 150+ satisfied clients.</p>
-            <div class="rating-badge">
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>Forge <span class="gradient-text">The Future</span><br>With SARR</h1>
+                <p>Premium digital agency offering 30+ creative services. 4.7★ rating from 150+ satisfied clients.</p>
+                <div class="rating-badge">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    <span>4.7 / 5.0 (158 ratings)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services">
+            <h2 class="section-title">Our Services</h2>
+            <div class="services-grid">
+                <!-- Graphics Design -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1421Eu_4FAhgIEyGOPuu5BYdcbEeAOZ9I?usp=sharing', '_blank')">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3>Graphics Design</h3>
+                    <p>Brand identity, print design & illustrations</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- AI Video Editing -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1yGM6V0s08-yc1pe0VoLzqEnRQQ1yUctQ?usp=sharing', '_blank')">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI Video Editing</h3>
+                    <p>AI-powered video enhancement & editing</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- 3D Character Design -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1fPkheh7jZzUOrAxpMZA7u4HYLwSm4KB7?usp=sharing', '_blank')">
+                    <i class="fas fa-cube"></i>
+                    <h3>3D Character Design</h3>
+                    <p>High-quality 3D modeling & character animation</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- Menu Design -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/18vTM-W4iT_kQugDwLPsfPJsJGehIR5Gs?usp=sharing', '_blank')">
+                    <i class="fas fa-utensils"></i>
+                    <h3>Menu Design</h3>
+                    <p>Restaurant menus, catalogs & brochures</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- Flyer Design -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1XeyUN0YE59do6sWieo-uYCR6M1h5fMqZ?usp=sharing', '_blank')">
+                    <i class="fas fa-scroll"></i>
+                    <h3>Flyer Design</h3>
+                    <p>Eye-catching flyers & promotional materials</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- Documentary Editing -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1_MP0jA1dV-zNPunXSreS2jP1Lknx2y-D?usp=sharing', '_blank')">
+                    <i class="fas fa-film"></i>
+                    <h3>Documentary Editing</h3>
+                    <p>Professional documentary post-production</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- Logo Design -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1Sh6f4yw85ZdZrvavVd8p0ewr6eUNm3n0?usp=sharing', '_blank')">
+                    <i class="fas fa-tag"></i>
+                    <h3>Logo Design</h3>
+                    <p>Unique brand logos & visual identity</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- Web Development -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1YaeJ4hr7QfXxBihM-6IlbjLrHx1X08B_?usp=sharing', '_blank')">
+                    <i class="fas fa-code"></i>
+                    <h3>Web Development</h3>
+                    <p>Custom websites & web applications</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- UI/UX Design -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1QrW_KR8uAwBwZah7Dxn4X0ZGiwYdu4in?usp=sharing', '_blank')">
+                    <i class="fas fa-paint-bucket"></i>
+                    <h3>UI/UX Design</h3>
+                    <p>User-centered interface & experience design</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- CGI Ads -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1MRPX0oIMJA8JspJTIDVG9qF3UBi_Fpd3?usp=sharing', '_blank')">
+                    <i class="fas fa-ad"></i>
+                    <h3>CGI Ads</h3>
+                    <p>Computer-generated advertising content</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- 2D Animation -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1HywPhjbvn-NG8olA_YzduRvSw1H8UibJ?usp=sharing', '_blank')">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3>2D Animation</h3>
+                    <p>2D character animation & motion graphics</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+                
+                <!-- Game Development -->
+                <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1yGM6V0s08-yc1pe0VoLzqEnRQQ1yUctQ?usp=sharing', '_blank')">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Game Development</h3>
+                    <p>2D & 3D game design and development</p>
+                    <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Categories -->
+        <section id="portfolio">
+            <h2 class="section-title">Portfolio Categories</h2>
+            <div class="categories-grid">
+                <!-- All Drive Links -->
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1421Eu_4FAhgIEyGOPuu5BYdcbEeAOZ9I?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3 class="category-title">Graphics Design</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-images"></i> Multiple files</span>
+                    </div>
+                </div>
+                
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/18vTM-W4iT_kQugDwLPsfPJsJGehIR5Gs?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-utensils"></i></div>
+                    <h3 class="category-title">Menu Design</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-images"></i> Multiple files</span>
+                    </div>
+                </div>
+                
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1HywPhjbvn-NG8olA_YzduRvSw1H8UibJ?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3 class="category-title">2D Animation</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-video"></i> Multiple files</span>
+                    </div>
+                </div>
+                
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1MRPX0oIMJA8JspJTIDVG9qF3UBi_Fpd3?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-ad"></i></div>
+                    <h3 class="category-title">CGI Ads</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-video"></i> Multiple files</span>
+                    </div>
+                </div>
+                
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1QrW_KR8uAwBwZah7Dxn4X0ZGiwYdu4in?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-paint-bucket"></i></div>
+                    <h3 class="category-title">UI/UX Design</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-images"></i> Multiple files</span>
+                    </div>
+                </div>
+                
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1Sh6f4yw85ZdZrvavVd8p0ewr6eUNm3n0?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-tag"></i></div>
+                    <h3 class="category-title">Logo Design</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-images"></i> Multiple files</span>
+                    </div>
+                </div>
+                
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1XeyUN0YE59do6sWieo-uYCR6M1h5fMqZ?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-scroll"></i></div>
+                    <h3 class="category-title">Flyer Design</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-images"></i> Multiple files</span>
+                    </div>
+                </div>
+                
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1YaeJ4hr7QfXxBihM-6IlbjLrHx1X08B_?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-code"></i></div>
+                    <h3 class="category-title">Web Development</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-images"></i> Multiple files</span>
+                    </div>
+                </div>
+                
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1_MP0jA1dV-zNPunXSreS2jP1Lknx2y-D?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-film"></i></div>
+                    <h3 class="category-title">Documentary Editing</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-video"></i> Multiple files</span>
+                    </div>
+                </div>
+                
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1fPkheh7jZzUOrAxpMZA7u4HYLwSm4KB7?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-cube"></i></div>
+                    <h3 class="category-title">3D Character Design</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-images"></i> Multiple files</span>
+                    </div>
+                </div>
+                
+                <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1yGM6V0s08-yc1pe0VoLzqEnRQQ1yUctQ?usp=sharing', '_blank')">
+                    <div class="category-icon"><i class="fas fa-robot"></i></div>
+                    <h3 class="category-title">AI Video Editing</h3>
+                    <div class="category-stats">
+                        <span><i class="fas fa-video"></i> Multiple files</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials">
+            <h2 class="section-title">What Our Clients Say</h2>
+            <div class="testimonials-grid">
+                <!-- 8 Client Testimonials -->
+                <div class="testimonial-card">
+                    <div class="client-info">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Sarah Johnson">
+                        <div>
+                            <div class="client-name">Sarah Johnson</div>
+                            <div class="client-title">CEO, TechStart</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="quote">"SARR transformed our brand identity. The 3D character they designed became our mascot. Outstanding work!"</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="client-info">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Michael Chen">
+                        <div>
+                            <div class="client-name">Michael Chen</div>
+                            <div class="client-title">Marketing Director</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="quote">"The documentary editing was phenomenal. Our YouTube views increased by 300%. Highly professional team."</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="client-info">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Emma Rodriguez">
+                        <div>
+                            <div class="client-name">Emma Rodriguez</div>
+                            <div class="client-title">Restaurant Owner</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p class="quote">"Menu design and branding exceeded expectations. Our customers love the new look. Will work again!"</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="client-info">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=150" alt="David Kim">
+                        <div>
+                            <div class="client-name">David Kim</div>
+                            <div class="client-title">Game Developer</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="quote">"The 3D character design for our game was incredible. Professional workflow and quick delivery. 5 stars!"</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="client-info">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/712513/pexels-photo-712513.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Lisa Thompson">
+                        <div>
+                            <div class="client-name">Lisa Thompson</div>
+                            <div class="client-title">Creative Director</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="quote">"Their UI/UX design transformed our app. User engagement doubled within a month. Exceptional work!"</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="client-info">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=150" alt="James Wilson">
+                        <div>
+                            <div class="client-name">James Wilson</div>
+                            <div class="client-title">Startup Founder</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="quote">"Logo design and branding package was perfect. Captured our vision exactly. Highly recommended!"</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="client-info">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Maria Garcia">
+                        <div>
+                            <div class="client-name">Maria Garcia</div>
+                            <div class="client-title">Event Planner</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="quote">"Flyer designs were stunning! Our event sold out thanks to their eye-catching promotional materials."</p>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="client-info">
+                        <img class="client-avatar" src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Robert Taylor">
+                        <div>
+                            <div class="client-name">Robert Taylor</div>
+                            <div class="client-title">Film Producer</div>
+                        </div>
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <p class="quote">"Documentary editing was top-notch. They understood the narrative perfectly. Will hire again."</p>
+                </div>
+            </div>
+            
+            <!-- Stats Summary -->
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">158</div>
+                    <div class="stat-label">Total Ratings</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4.7</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Featured Clients</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Happy Clients</div>
+                </div>
+            </div>
+
+            <!-- Submit Rating Form -->
+            <div id="rate" class="rating-form-container">
+                <h3 class="rating-form-title">Rate Your Experience</h3>
+                <form id="ratingForm">
+                    <div class="form-group">
+                        <label>Your Rating</label>
+                        <div class="star-rating" id="starRating">
+                            <i class="far fa-star" data-rating="1"></i>
+                            <i class="far fa-star" data-rating="2"></i>
+                            <i class="far fa-star" data-rating="3"></i>
+                            <i class="far fa-star" data-rating="4"></i>
+                            <i class="far fa-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ratingName">Your Name</label>
+                        <input type="text" id="ratingName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ratingEmail">Email (Optional)</label>
+                        <input type="email" id="ratingEmail">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ratingMessage">Your Review</label>
+                        <textarea id="ratingMessage" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="form-status" id="ratingFormStatus"></div>
+                    <button type="submit" class="submit-btn" id="submitRatingBtn">
+                        <i class="fas fa-star"></i> Submit Rating
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2026 SARR Incorporation — All Services Available • 150+ Happy Clients • 4.7★ Rating</p>
+            <div class="rating-badge" style="margin: 2rem auto; justify-content: center;">
                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
                 <span>4.7 / 5.0 (158 ratings)</span>
             </div>
-        </div>
-    </section>
-
-    <!-- Services Section - ALL AVAILABLE -->
-    <section id="services">
-        <h2 class="section-title">Our Services (All Available)</h2>
-        <div class="services-grid">
-            <!-- Graphics Design -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1421Eu_4FAhgIEyGOPuu5BYdcbEeAOZ9I?usp=sharing', '_blank')">
-                <i class="fas fa-paint-brush"></i>
-                <h3>Graphics Design</h3>
-                <p>Brand identity, print design & illustrations</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- AI Video Editing -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1yGM6V0s08-yc1pe0VoLzqEnRQQ1yUctQ?usp=sharing', '_blank')">
-                <i class="fas fa-robot"></i>
-                <h3>AI Video Editing</h3>
-                <p>AI-powered video enhancement & editing</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- 3D Character Design -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1fPkheh7jZzUOrAxpMZA7u4HYLwSm4KB7?usp=sharing', '_blank')">
-                <i class="fas fa-cube"></i>
-                <h3>3D Character Design</h3>
-                <p>High-quality 3D modeling & character animation</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- Menu Design -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/18vTM-W4iT_kQugDwLPsfPJsJGehIR5Gs?usp=sharing', '_blank')">
-                <i class="fas fa-utensils"></i>
-                <h3>Menu Design</h3>
-                <p>Restaurant menus, catalogs & brochures</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- Flyer Design -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1XeyUN0YE59do6sWieo-uYCR6M1h5fMqZ?usp=sharing', '_blank')">
-                <i class="fas fa-scroll"></i>
-                <h3>Flyer Design</h3>
-                <p>Eye-catching flyers & promotional materials</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- Documentary Editing -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1_MP0jA1dV-zNPunXSreS2jP1Lknx2y-D?usp=sharing', '_blank')">
-                <i class="fas fa-film"></i>
-                <h3>Documentary Editing</h3>
-                <p>Professional documentary post-production</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- Logo Design -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1Sh6f4yw85ZdZrvavVd8p0ewr6eUNm3n0?usp=sharing', '_blank')">
-                <i class="fas fa-tag"></i>
-                <h3>Logo Design</h3>
-                <p>Unique brand logos & visual identity</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- Web Development -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1YaeJ4hr7QfXxBihM-6IlbjLrHx1X08B_?usp=sharing', '_blank')">
-                <i class="fas fa-code"></i>
-                <h3>Web Development</h3>
-                <p>Custom websites & web applications</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- UI/UX Design -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1QrW_KR8uAwBwZah7Dxn4X0ZGiwYdu4in?usp=sharing', '_blank')">
-                <i class="fas fa-paint-bucket"></i>
-                <h3>UI/UX Design</h3>
-                <p>User-centered interface & experience design</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- CGI Ads -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1MRPX0oIMJA8JspJTIDVG9qF3UBi_Fpd3?usp=sharing', '_blank')">
-                <i class="fas fa-ad"></i>
-                <h3>CGI Ads</h3>
-                <p>Computer-generated advertising content</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- 2D Animation -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1HywPhjbvn-NG8olA_YzduRvSw1H8UibJ?usp=sharing', '_blank')">
-                <i class="fas fa-paint-brush"></i>
-                <h3>2D Animation</h3>
-                <p>2D character animation & motion graphics</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-            
-            <!-- Game Development -->
-            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1yGM6V0s08-yc1pe0VoLzqEnRQQ1yUctQ?usp=sharing', '_blank')">
-                <i class="fas fa-gamepad"></i>
-                <h3>Game Development</h3>
-                <p>2D & 3D game design and development</p>
-                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Portfolio Categories -->
-    <section id="portfolio">
-        <h2 class="section-title">Portfolio Categories</h2>
-        <div class="categories-grid">
-            <!-- All 11 Drive Links -->
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1421Eu_4FAhgIEyGOPuu5BYdcbEeAOZ9I?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-paint-brush"></i></div>
-                <h3 class="category-title">Graphics Design</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-images"></i> Multiple files</span>
-                </div>
-            </div>
-            
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/18vTM-W4iT_kQugDwLPsfPJsJGehIR5Gs?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-utensils"></i></div>
-                <h3 class="category-title">Menu Design</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-images"></i> Multiple files</span>
-                </div>
-            </div>
-            
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1HywPhjbvn-NG8olA_YzduRvSw1H8UibJ?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-paint-brush"></i></div>
-                <h3 class="category-title">2D Animation</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-video"></i> Multiple files</span>
-                </div>
-            </div>
-            
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1MRPX0oIMJA8JspJTIDVG9qF3UBi_Fpd3?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-ad"></i></div>
-                <h3 class="category-title">CGI Ads</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-video"></i> Multiple files</span>
-                </div>
-            </div>
-            
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1QrW_KR8uAwBwZah7Dxn4X0ZGiwYdu4in?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-paint-bucket"></i></div>
-                <h3 class="category-title">UI/UX Design</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-images"></i> Multiple files</span>
-                </div>
-            </div>
-            
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1Sh6f4yw85ZdZrvavVd8p0ewr6eUNm3n0?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-tag"></i></div>
-                <h3 class="category-title">Logo Design</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-images"></i> Multiple files</span>
-                </div>
-            </div>
-            
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1XeyUN0YE59do6sWieo-uYCR6M1h5fMqZ?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-scroll"></i></div>
-                <h3 class="category-title">Flyer Design</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-images"></i> Multiple files</span>
-                </div>
-            </div>
-            
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1YaeJ4hr7QfXxBihM-6IlbjLrHx1X08B_?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-code"></i></div>
-                <h3 class="category-title">Web Development</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-images"></i> Multiple files</span>
-                </div>
-            </div>
-            
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1_MP0jA1dV-zNPunXSreS2jP1Lknx2y-D?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-film"></i></div>
-                <h3 class="category-title">Documentary Editing</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-video"></i> Multiple files</span>
-                </div>
-            </div>
-            
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1fPkheh7jZzUOrAxpMZA7u4HYLwSm4KB7?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-cube"></i></div>
-                <h3 class="category-title">3D Character Design</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-images"></i> Multiple files</span>
-                </div>
-            </div>
-            
-            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1yGM6V0s08-yc1pe0VoLzqEnRQQ1yUctQ?usp=sharing', '_blank')">
-                <div class="category-icon"><i class="fas fa-robot"></i></div>
-                <h3 class="category-title">AI Video Editing</h3>
-                <div class="category-stats">
-                    <span><i class="fas fa-video"></i> Multiple files</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials">
-        <h2 class="section-title">What Our Clients Say</h2>
-        <div class="testimonials-grid" id="testimonialsGrid">
-            <!-- 8 Client Testimonials with Ratings -->
-            <div class="testimonial-card">
-                <div class="client-info">
-                    <img class="client-avatar" src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Sarah Johnson">
-                    <div>
-                        <div class="client-name">Sarah Johnson</div>
-                        <div class="client-title">CEO, TechStart</div>
-                    </div>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="quote">"SARR transformed our brand identity. The 3D character they designed became our mascot. Outstanding work!"</p>
-            </div>
-            
-            <div class="testimonial-card">
-                <div class="client-info">
-                    <img class="client-avatar" src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Michael Chen">
-                    <div>
-                        <div class="client-name">Michael Chen</div>
-                        <div class="client-title">Marketing Director</div>
-                    </div>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="quote">"The documentary editing was phenomenal. Our YouTube views increased by 300%. Highly professional team."</p>
-            </div>
-            
-            <div class="testimonial-card">
-                <div class="client-info">
-                    <img class="client-avatar" src="https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Emma Rodriguez">
-                    <div>
-                        <div class="client-name">Emma Rodriguez</div>
-                        <div class="client-title">Restaurant Owner</div>
-                    </div>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                </div>
-                <p class="quote">"Menu design and branding exceeded expectations. Our customers love the new look. Will work again!"</p>
-            </div>
-            
-            <div class="testimonial-card">
-                <div class="client-info">
-                    <img class="client-avatar" src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=150" alt="David Kim">
-                    <div>
-                        <div class="client-name">David Kim</div>
-                        <div class="client-title">Game Developer</div>
-                    </div>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="quote">"The 3D character design for our game was incredible. Professional workflow and quick delivery. 5 stars!"</p>
-            </div>
-            
-            <div class="testimonial-card">
-                <div class="client-info">
-                    <img class="client-avatar" src="https://images.pexels.com/photos/712513/pexels-photo-712513.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Lisa Thompson">
-                    <div>
-                        <div class="client-name">Lisa Thompson</div>
-                        <div class="client-title">Creative Director</div>
-                    </div>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="quote">"Their UI/UX design transformed our app. User engagement doubled within a month. Exceptional work!"</p>
-            </div>
-            
-            <div class="testimonial-card">
-                <div class="client-info">
-                    <img class="client-avatar" src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=150" alt="James Wilson">
-                    <div>
-                        <div class="client-name">James Wilson</div>
-                        <div class="client-title">Startup Founder</div>
-                    </div>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="quote">"Logo design and branding package was perfect. Captured our vision exactly. Highly recommended!"</p>
-            </div>
-            
-            <div class="testimonial-card">
-                <div class="client-info">
-                    <img class="client-avatar" src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Maria Garcia">
-                    <div>
-                        <div class="client-name">Maria Garcia</div>
-                        <div class="client-title">Event Planner</div>
-                    </div>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                </div>
-                <p class="quote">"Flyer designs were stunning! Our event sold out thanks to their eye-catching promotional materials."</p>
-            </div>
-            
-            <div class="testimonial-card">
-                <div class="client-info">
-                    <img class="client-avatar" src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Robert Taylor">
-                    <div>
-                        <div class="client-name">Robert Taylor</div>
-                        <div class="client-title">Film Producer</div>
-                    </div>
-                </div>
-                <div class="rating">
-                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                </div>
-                <p class="quote">"Documentary editing was top-notch. They understood the narrative perfectly. Will hire again."</p>
-            </div>
-        </div>
-        
-        <!-- Stats Summary -->
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-number">158</div>
-                <div class="stat-label">Total Ratings</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">4.7</div>
-                <div class="stat-label">Average Rating</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">8</div>
-                <div class="stat-label">Featured Clients</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">150+</div>
-                <div class="stat-label">Happy Clients</div>
-            </div>
-        </div>
-
-        <!-- Submit Rating Form -->
-        <div id="rate" class="rating-form-container">
-            <h3 class="rating-form-title">Rate Your Experience</h3>
-            <form id="ratingForm">
-                <div class="form-group">
-                    <label>Your Rating</label>
-                    <div class="star-rating" id="starRating">
-                        <i class="far fa-star" data-rating="1"></i>
-                        <i class="far fa-star" data-rating="2"></i>
-                        <i class="far fa-star" data-rating="3"></i>
-                        <i class="far fa-star" data-rating="4"></i>
-                        <i class="far fa-star" data-rating="5"></i>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ratingName">Your Name</label>
-                    <input type="text" id="ratingName" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ratingEmail">Email (Optional)</label>
-                    <input type="email" id="ratingEmail">
-                </div>
-                
-                <div class="form-group">
-                    <label for="ratingMessage">Your Review</label>
-                    <textarea id="ratingMessage" rows="4" required></textarea>
-                </div>
-                
-                <div class="form-status" id="ratingFormStatus"></div>
-                <button type="submit" class="submit-btn" id="submitRatingBtn">
-                    <i class="fas fa-star"></i> Submit Rating
-                </button>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>© 2026 SARR Incorporation — All Services Available • 150+ Happy Clients • 4.7★ Rating</p>
-        <div class="rating-badge" style="margin: 2rem auto; justify-content: center;">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-            <span>4.7 / 5.0 (158 ratings)</span>
-        </div>
-        <div class="social-links">
-            <i class="fab fa-twitter"></i>
-            <i class="fab fa-instagram"></i>
-            <i class="fab fa-linkedin"></i>
-            <i class="fab fa-behance"></i>
-            <i class="fab fa-youtube"></i>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <!-- Notification Toast -->
     <div id="notificationToast" class="notification-toast">
@@ -1052,6 +1292,7 @@
                 navLinks.style.background = 'rgba(10, 12, 21, 0.95)';
                 navLinks.style.padding = '2rem';
                 navLinks.style.backdropFilter = 'blur(10px)';
+                navLinks.style.zIndex = '99';
             }
         });
 
@@ -1106,7 +1347,6 @@
             const formStatus = document.getElementById('ratingFormStatus');
             const submitBtn = document.getElementById('submitRatingBtn');
             
-            // Validate rating
             if (selectedRating === 0) {
                 formStatus.className = 'form-status error';
                 formStatus.textContent = '❌ Please select a rating';
@@ -1129,7 +1369,6 @@
                 if (db) {
                     await db.collection('ratings').add(ratingData);
                 } else {
-                    // Fallback to localStorage
                     const ratings = JSON.parse(localStorage.getItem('ratings') || '[]');
                     ratings.push(ratingData);
                     localStorage.setItem('ratings', JSON.stringify(ratings));
@@ -1139,7 +1378,6 @@
                 formStatus.textContent = '✅ Thank you for your rating!';
                 showNotification('🌟 Rating submitted successfully!');
                 
-                // Reset form
                 this.reset();
                 selectedRating = 0;
                 stars.forEach(s => {
@@ -1167,7 +1405,6 @@
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
-                    // Close mobile menu if open
                     document.querySelector('.nav-links').style.display = '';
                 }
             });
