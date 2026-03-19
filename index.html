@@ -2,128 +2,145 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>SARR Incorporation · Digital Agency</title>
-    <!-- Font & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Firebase SDK -->
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <!-- Three.js core & addons -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
-            }
-        }
-    </script>
     <style>
-        /* BASE & RESET */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: #0b0c12; 
-            color: #f0f2ff; 
-            overflow-x: hidden; 
-            line-height: 1.5; 
-            scroll-behavior: smooth; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
-        /* YouTube Video Background Container */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0c15;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* YouTube Video Background */
         #video-bg-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
             overflow: hidden;
         }
         
-        .youtube-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-        
-        .youtube-bg iframe {
-            width: 100vw;
-            height: 56.25vw; /* 16:9 aspect ratio */
-            min-height: 100vh;
-            min-width: 177.77vh; /* 16:9 aspect ratio */
+        #video-bg {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            opacity: 0.3;
+            width: 100vw;
+            height: 56.25vw;
+            min-height: 100vh;
+            min-width: 177.77vh;
+            opacity: 0.15;
             pointer-events: none;
         }
         
         #video-overlay {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, #0b0c12 90%);
-            pointer-events: none;
+            background: radial-gradient(circle at center, transparent 0%, #0a0c15 90%);
+            z-index: -1;
         }
-
-        /* main content layer above video */
-        .content { position: relative; z-index: 5; }
         
-        /* glassmorphism reusable + neon */
-        .glass-panel {
-            background: rgba(20, 25, 40, 0.25);
-            backdrop-filter: blur(12px) saturate(180%);
-            -webkit-backdrop-filter: blur(12px) saturate(180%);
-            border: 1px solid rgba(100, 210, 255, 0.2);
-            border-radius: 2rem;
-            box-shadow: 0 18px 35px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(0, 255, 255, 0.1) inset, 0 0 15px rgba(0, 180, 255, 0.3);
-        }
-        .glass-panel:hover { border-color: rgba(0, 230, 255, 0.6); box-shadow: 0 20px 40px -10px #0055ff40, 0 0 25px #00f7ff; transition: 0.3s; }
-        .neon-text { text-shadow: 0 0 10px #00e0ff, 0 0 20px #0077ff; }
-        .gradient-accent { background: linear-gradient(135deg, #a05eff, #00ddff, #a05eff); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
-        
-        /* layout */
-        section { padding: 5rem 8%; max-width: 1600px; margin: 0 auto; }
-        h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; }
-        h2 { font-size: 3.5rem; margin-bottom: 2rem; display: inline-block; border-left: 6px solid #0ef; padding-left: 2rem; }
-        
-        /* buttons */
-        .btn {
-            display: inline-flex; align-items: center; gap: 10px; padding: 1rem 2.5rem; border-radius: 50px; font-weight: 600;
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(8px); border: 1px solid rgba(0,255,255,0.3);
-            color: white; cursor: pointer; transition: 0.25s; text-decoration: none; letter-spacing: 0.5px;
-            box-shadow: 0 8px 20px -10px #00a6ff;
-        }
-        .btn:hover { background: rgba(0, 200, 255, 0.2); border-color: #0ef; box-shadow: 0 0 25px #0ef, 0 10px 25px -5px #0066ff; transform: scale(1.02); }
-        .btn i { font-size: 1.2rem; color: #0ef; }
-        
-        /* header glass */
+        /* Navigation */
         .navbar {
-            display: flex; justify-content: space-between; align-items: center; padding: 1rem 8%; 
-            background: rgba(8, 12, 25, 0.3); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(0,255,255,0.15);
-            position: sticky; top: 0; z-index: 100; box-shadow: 0 10px 30px -10px #00000080;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(10, 12, 21, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
-        .logo { font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
-        .logo span { color: #0ef; }
-        .nav-links { display: flex; gap: 2.8rem; font-weight: 500; }
-        .nav-links a { text-decoration: none; color: #fff; font-size: 1.1rem; position: relative; padding: 0.3rem 0; }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: #0ef; box-shadow: 0 0 15px #0ef; transition: 0.3s; }
-        .nav-links a:hover::after { width: 100%; }
-        .mobile-toggle { display: none; font-size: 2rem; cursor: pointer; }
         
-        /* hero */
-        .hero { min-height: 90vh; display: flex; align-items: center; position: relative; }
-        .hero-content { max-width: 750px; }
-        .hero h1 { font-size: 5.2rem; line-height: 1.1; font-weight: 800; margin-bottom: 1.5rem; }
-        .hero p { font-size: 1.3rem; opacity: 0.8; margin-bottom: 2.5rem; max-width: 600px; }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
         
-        /* rating badge */
+        .logo span {
+            color: #0ef;
+            text-shadow: 0 0 10px #0ef;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+        
+        .nav-links a:hover {
+            color: #0ef;
+        }
+        
+        .mobile-toggle {
+            display: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #0ef;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            background: rgba(10, 12, 21, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 2rem;
+            padding: 3.5rem;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, #0ef, #a05eff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
         .rating-badge {
             display: inline-flex;
             align-items: center;
@@ -132,7 +149,8 @@
             padding: 0.8rem 1.5rem;
             border-radius: 50px;
             border: 1px solid #0ef;
-            margin-top: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
         }
         
         .rating-badge i {
@@ -140,184 +158,158 @@
         }
         
         .rating-badge span {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
         }
         
-        /* services grid - expanded */
+        /* Section Styles */
+        section {
+            padding: 5rem 5%;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 3rem;
+            border-left: 5px solid #0ef;
+            padding-left: 2rem;
+        }
+        
+        /* Services Grid */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            gap: 1.5rem;
         }
         
         .service-card {
-            background: rgba(20, 25, 45, 0.3);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(0,200,255,0.2);
-            border-radius: 2rem;
-            padding: 2rem 1.5rem;
-            transition: 0.2s;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            transition: 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: block;
             position: relative;
             overflow: hidden;
         }
         
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
-            transition: 0.5s;
+        .service-card:hover {
+            border-color: #0ef;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
         }
         
-        .service-card:hover::before {
-            left: 100%;
+        .service-card i {
+            font-size: 2.5rem;
+            color: #0ef;
+            margin-bottom: 1rem;
         }
         
-        .service-card i { 
-            font-size: 3rem; 
-            color: #0ef; 
-            margin-bottom: 1.5rem;
-        }
-        
-        .service-card h3 { 
-            font-size: 1.8rem; 
-            margin-bottom: 0.8rem;
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
         }
         
         .service-card p {
             color: #a0a8c0;
+            margin-bottom: 1rem;
             font-size: 0.95rem;
         }
         
-        .service-card .badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: #0ef;
-            color: #000;
-            padding: 0.3rem 0.8rem;
+        .card-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
         }
         
-        /* category folders for portfolio */
-        .category-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin: 2rem 0;
-            justify-content: center;
-        }
-        
-        .category-btn {
-            padding: 0.8rem 1.8rem;
-            border-radius: 50px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(0,255,255,0.2);
-            color: white;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.9rem;
-        }
-        
-        .category-btn:hover,
-        .category-btn.active {
+        .drive-badge {
             background: #0ef;
             color: #000;
-            border-color: #0ef;
-            box-shadow: 0 0 20px #0ef;
         }
         
-        .portfolio-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .portfolio-item {
-            aspect-ratio: 16/9;
-            border-radius: 2rem;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            border: 1px solid rgba(0,255,255,0.1);
-        }
-        
-        .portfolio-item iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            pointer-events: none;
-        }
-        
-        .portfolio-item .portfolio-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 2rem;
-            background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%);
-            transform: translateY(100%);
-            transition: 0.3s;
-        }
-        
-        .portfolio-item:hover .portfolio-content {
-            transform: translateY(0);
-        }
-        
-        .portfolio-item .category {
-            color: #0ef;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        
-        .jpeg-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-        
-        .portfolio-item:hover .jpeg-image {
-            transform: scale(1.1);
-        }
-        
-        /* testimonials with rating */
-        .testimonials-grid {
+        /* Portfolio Categories Grid */
+        .categories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
         
-        .testi-card {
-            padding: 2.5rem 2rem;
+        .category-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            transition: 0.3s;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
         }
         
-        .testi-card .rating {
-            color: #ffd700;
-            font-size: 1.2rem;
-            margin: 1rem 0;
+        .category-card:hover {
+            border-color: #0ef;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
         }
         
-        .testi-card i {
+        .category-card.drive {
+            border-left: 5px solid #0ef;
+        }
+        
+        .category-icon {
+            font-size: 2rem;
             color: #0ef;
-            font-size: 2.5rem;
-            opacity: 0.5;
             margin-bottom: 1rem;
         }
         
-        .testi-card h4 {
-            margin-top: 1.5rem;
-            font-weight: 300;
+        .category-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .category-stats {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            color: #a0a8c0;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            transition: 0.3s;
+        }
+        
+        .testimonial-card:hover {
+            border-color: #0ef;
+        }
+        
+        .client-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
         
         .client-avatar {
@@ -325,61 +317,209 @@
             height: 60px;
             border-radius: 50%;
             border: 2px solid #0ef;
-            margin-right: 1rem;
             object-fit: cover;
+            background: #1a1f2e;
         }
         
-        /* stats section */
+        .client-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .client-title {
+            color: #a0a8c0;
+            font-size: 0.9rem;
+        }
+        
+        .rating {
+            color: #ffd700;
+            margin: 1rem 0;
+            font-size: 1rem;
+        }
+        
+        .quote {
+            color: #a0a8c0;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        
+        /* Rating Form */
+        .rating-form-container {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            margin-top: 3rem;
+        }
+        
+        .rating-form-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: #0ef;
+        }
+        
+        .star-rating {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        
+        .star-rating i {
+            color: #ffd700;
+            transition: 0.2s;
+        }
+        
+        .star-rating i:hover {
+            transform: scale(1.2);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #a0a8c0;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 1rem;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0ef;
+        }
+        
+        .submit-btn {
+            background: #0ef;
+            color: #000;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.3s;
+        }
+        
+        .submit-btn:hover {
+            box-shadow: 0 0 30px #0ef;
+            transform: scale(1.02);
+        }
+        
+        .form-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 1rem;
+            text-align: center;
+            display: none;
+        }
+        
+        .form-status.success {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            display: block;
+        }
+        
+        .form-status.error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            display: block;
+        }
+        
+        /* Stats Section */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 2rem;
-            margin: 4rem 0;
+            text-align: center;
+            padding: 3rem 5%;
         }
         
         .stat-item {
-            text-align: center;
-            padding: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 1rem;
         }
         
         .stat-number {
-            font-size: 3rem;
+            font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 800;
             color: #0ef;
         }
         
         .stat-label {
-            font-size: 1rem;
-            opacity: 0.7;
+            font-size: 0.9rem;
+            color: #a0a8c0;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            margin-top: 0.5rem;
         }
         
-        /* footer */
-        footer { 
-            text-align: center; 
-            padding: 4rem 8%; 
-            border-top: 1px solid rgba(0,255,255,0.1); 
-            background: rgba(0,0,0,0.2); 
-            backdrop-filter: blur(10px); 
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(0, 255, 255, 0.1);
         }
         
-        /* notification toast */
+        .social-links {
+            margin-top: 2rem;
+            font-size: 1.8rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .social-links i {
+            transition: 0.3s;
+            cursor: pointer;
+            color: #fff;
+        }
+        
+        .social-links i:hover {
+            color: #0ef;
+            transform: translateY(-3px);
+        }
+        
+        /* Notification Toast */
         .notification-toast {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            padding: 1.5rem 2rem;
-            background: rgba(20, 25, 40, 0.95);
+            bottom: 20px;
+            right: 20px;
+            left: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            background: rgba(10, 12, 21, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid #0ef;
-            border-radius: 2rem;
+            border-radius: 1rem;
             color: white;
             z-index: 1000;
             transform: translateY(100px);
             opacity: 0;
             transition: all 0.3s;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
         .notification-toast.show {
@@ -392,514 +532,481 @@
             margin-right: 10px;
         }
         
-        /* responsiveness */
-        @media (max-width: 1000px) {
-            h2 { font-size: 2.8rem; }
-            .hero h1 { font-size: 4rem; }
-        }
-        @media (max-width: 700px) {
-            .nav-links { display: none; }
-            .mobile-toggle { display: block; }
-            section { padding: 3rem 5%; }
-            h2 { font-size: 2.2rem; }
-            .hero h1 { font-size: 3rem; }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .hero-content {
+                padding: 2rem;
+            }
+            
+            .rating-badge {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .services-grid,
+            .categories-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            section {
+                padding: 3rem 4%;
+            }
         }
         
-        /* parallax scroll hint */
-        .parallax-hint { 
-            position: absolute; 
-            bottom: 30px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            color: #0ef; 
-            font-size: 1.5rem; 
-            opacity: 0.5; 
-            animation: bounce 2s infinite; 
-        }
-        @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(-10px);} }
-        
-        /* Three.js container */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.3;
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .services-grid,
+            .categories-grid,
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Three.js Canvas -->
-    <div id="canvas-container"></div>
-
-    <!-- YouTube Video Background -->
+    <!-- YouTube Background Video -->
     <div id="video-bg-container">
-        <div class="youtube-bg">
-            <!-- Cinematic background video -->
-            <iframe src="https://www.youtube.com/embed/2g811Eo7K8U?autoplay=1&mute=1&loop=1&playlist=2g811Eo7K8U&controls=0&showinfo=0&modestbranding=1&iv_load_policy=3&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        </div>
-        <div id="video-overlay"></div>
+        <iframe id="video-bg" 
+                src="https://www.youtube.com/embed/7q2XK3dE8uA?autoplay=1&mute=1&loop=1&playlist=7q2XK3dE8uA&controls=0&showinfo=0&modestbranding=1&iv_load_policy=3&rel=0" 
+                frameborder="0" 
+                allow="autoplay; encrypted-media">
+        </iframe>
     </div>
+    <div id="video-overlay"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">SARR <span>Incorporation</span>™</div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#rate">Rate Us</a>
+        </div>
+        <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Forge <span class="gradient-text">The Future</span><br>With SARR</h1>
+            <p>Premium digital agency offering 30+ creative services. 4.7★ rating from 150+ satisfied clients.</p>
+            <div class="rating-badge">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                <span>4.7 / 5.0 (158 ratings)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section - ALL AVAILABLE -->
+    <section id="services">
+        <h2 class="section-title">Our Services (All Available)</h2>
+        <div class="services-grid">
+            <!-- Graphics Design -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1421Eu_4FAhgIEyGOPuu5BYdcbEeAOZ9I?usp=sharing', '_blank')">
+                <i class="fas fa-paint-brush"></i>
+                <h3>Graphics Design</h3>
+                <p>Brand identity, print design & illustrations</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- AI Video Editing -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1yGM6V0s08-yc1pe0VoLzqEnRQQ1yUctQ?usp=sharing', '_blank')">
+                <i class="fas fa-robot"></i>
+                <h3>AI Video Editing</h3>
+                <p>AI-powered video enhancement & editing</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- 3D Character Design -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1fPkheh7jZzUOrAxpMZA7u4HYLwSm4KB7?usp=sharing', '_blank')">
+                <i class="fas fa-cube"></i>
+                <h3>3D Character Design</h3>
+                <p>High-quality 3D modeling & character animation</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- Menu Design -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/18vTM-W4iT_kQugDwLPsfPJsJGehIR5Gs?usp=sharing', '_blank')">
+                <i class="fas fa-utensils"></i>
+                <h3>Menu Design</h3>
+                <p>Restaurant menus, catalogs & brochures</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- Flyer Design -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1XeyUN0YE59do6sWieo-uYCR6M1h5fMqZ?usp=sharing', '_blank')">
+                <i class="fas fa-scroll"></i>
+                <h3>Flyer Design</h3>
+                <p>Eye-catching flyers & promotional materials</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- Documentary Editing -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1_MP0jA1dV-zNPunXSreS2jP1Lknx2y-D?usp=sharing', '_blank')">
+                <i class="fas fa-film"></i>
+                <h3>Documentary Editing</h3>
+                <p>Professional documentary post-production</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- Logo Design -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1Sh6f4yw85ZdZrvavVd8p0ewr6eUNm3n0?usp=sharing', '_blank')">
+                <i class="fas fa-tag"></i>
+                <h3>Logo Design</h3>
+                <p>Unique brand logos & visual identity</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- Web Development -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1YaeJ4hr7QfXxBihM-6IlbjLrHx1X08B_?usp=sharing', '_blank')">
+                <i class="fas fa-code"></i>
+                <h3>Web Development</h3>
+                <p>Custom websites & web applications</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- UI/UX Design -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1QrW_KR8uAwBwZah7Dxn4X0ZGiwYdu4in?usp=sharing', '_blank')">
+                <i class="fas fa-paint-bucket"></i>
+                <h3>UI/UX Design</h3>
+                <p>User-centered interface & experience design</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- CGI Ads -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1MRPX0oIMJA8JspJTIDVG9qF3UBi_Fpd3?usp=sharing', '_blank')">
+                <i class="fas fa-ad"></i>
+                <h3>CGI Ads</h3>
+                <p>Computer-generated advertising content</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- 2D Animation -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1HywPhjbvn-NG8olA_YzduRvSw1H8UibJ?usp=sharing', '_blank')">
+                <i class="fas fa-paint-brush"></i>
+                <h3>2D Animation</h3>
+                <p>2D character animation & motion graphics</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+            
+            <!-- Game Development -->
+            <div class="service-card" onclick="window.open('https://drive.google.com/drive/folders/1yGM6V0s08-yc1pe0VoLzqEnRQQ1yUctQ?usp=sharing', '_blank')">
+                <i class="fas fa-gamepad"></i>
+                <h3>Game Development</h3>
+                <p>2D & 3D game design and development</p>
+                <span class="card-badge drive-badge"><i class="fab fa-google-drive"></i> View Work</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Categories -->
+    <section id="portfolio">
+        <h2 class="section-title">Portfolio Categories</h2>
+        <div class="categories-grid">
+            <!-- All 11 Drive Links -->
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1421Eu_4FAhgIEyGOPuu5BYdcbEeAOZ9I?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-paint-brush"></i></div>
+                <h3 class="category-title">Graphics Design</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-images"></i> Multiple files</span>
+                </div>
+            </div>
+            
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/18vTM-W4iT_kQugDwLPsfPJsJGehIR5Gs?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-utensils"></i></div>
+                <h3 class="category-title">Menu Design</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-images"></i> Multiple files</span>
+                </div>
+            </div>
+            
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1HywPhjbvn-NG8olA_YzduRvSw1H8UibJ?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-paint-brush"></i></div>
+                <h3 class="category-title">2D Animation</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-video"></i> Multiple files</span>
+                </div>
+            </div>
+            
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1MRPX0oIMJA8JspJTIDVG9qF3UBi_Fpd3?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-ad"></i></div>
+                <h3 class="category-title">CGI Ads</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-video"></i> Multiple files</span>
+                </div>
+            </div>
+            
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1QrW_KR8uAwBwZah7Dxn4X0ZGiwYdu4in?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-paint-bucket"></i></div>
+                <h3 class="category-title">UI/UX Design</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-images"></i> Multiple files</span>
+                </div>
+            </div>
+            
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1Sh6f4yw85ZdZrvavVd8p0ewr6eUNm3n0?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-tag"></i></div>
+                <h3 class="category-title">Logo Design</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-images"></i> Multiple files</span>
+                </div>
+            </div>
+            
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1XeyUN0YE59do6sWieo-uYCR6M1h5fMqZ?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-scroll"></i></div>
+                <h3 class="category-title">Flyer Design</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-images"></i> Multiple files</span>
+                </div>
+            </div>
+            
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1YaeJ4hr7QfXxBihM-6IlbjLrHx1X08B_?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-code"></i></div>
+                <h3 class="category-title">Web Development</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-images"></i> Multiple files</span>
+                </div>
+            </div>
+            
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1_MP0jA1dV-zNPunXSreS2jP1Lknx2y-D?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-film"></i></div>
+                <h3 class="category-title">Documentary Editing</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-video"></i> Multiple files</span>
+                </div>
+            </div>
+            
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1fPkheh7jZzUOrAxpMZA7u4HYLwSm4KB7?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-cube"></i></div>
+                <h3 class="category-title">3D Character Design</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-images"></i> Multiple files</span>
+                </div>
+            </div>
+            
+            <div class="category-card drive" onclick="window.open('https://drive.google.com/drive/folders/1yGM6V0s08-yc1pe0VoLzqEnRQQ1yUctQ?usp=sharing', '_blank')">
+                <div class="category-icon"><i class="fas fa-robot"></i></div>
+                <h3 class="category-title">AI Video Editing</h3>
+                <div class="category-stats">
+                    <span><i class="fas fa-video"></i> Multiple files</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials">
+        <h2 class="section-title">What Our Clients Say</h2>
+        <div class="testimonials-grid" id="testimonialsGrid">
+            <!-- 8 Client Testimonials with Ratings -->
+            <div class="testimonial-card">
+                <div class="client-info">
+                    <img class="client-avatar" src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Sarah Johnson">
+                    <div>
+                        <div class="client-name">Sarah Johnson</div>
+                        <div class="client-title">CEO, TechStart</div>
+                    </div>
+                </div>
+                <div class="rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="quote">"SARR transformed our brand identity. The 3D character they designed became our mascot. Outstanding work!"</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="client-info">
+                    <img class="client-avatar" src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Michael Chen">
+                    <div>
+                        <div class="client-name">Michael Chen</div>
+                        <div class="client-title">Marketing Director</div>
+                    </div>
+                </div>
+                <div class="rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="quote">"The documentary editing was phenomenal. Our YouTube views increased by 300%. Highly professional team."</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="client-info">
+                    <img class="client-avatar" src="https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Emma Rodriguez">
+                    <div>
+                        <div class="client-name">Emma Rodriguez</div>
+                        <div class="client-title">Restaurant Owner</div>
+                    </div>
+                </div>
+                <div class="rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <p class="quote">"Menu design and branding exceeded expectations. Our customers love the new look. Will work again!"</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="client-info">
+                    <img class="client-avatar" src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=150" alt="David Kim">
+                    <div>
+                        <div class="client-name">David Kim</div>
+                        <div class="client-title">Game Developer</div>
+                    </div>
+                </div>
+                <div class="rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="quote">"The 3D character design for our game was incredible. Professional workflow and quick delivery. 5 stars!"</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="client-info">
+                    <img class="client-avatar" src="https://images.pexels.com/photos/712513/pexels-photo-712513.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Lisa Thompson">
+                    <div>
+                        <div class="client-name">Lisa Thompson</div>
+                        <div class="client-title">Creative Director</div>
+                    </div>
+                </div>
+                <div class="rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="quote">"Their UI/UX design transformed our app. User engagement doubled within a month. Exceptional work!"</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="client-info">
+                    <img class="client-avatar" src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=150" alt="James Wilson">
+                    <div>
+                        <div class="client-name">James Wilson</div>
+                        <div class="client-title">Startup Founder</div>
+                    </div>
+                </div>
+                <div class="rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="quote">"Logo design and branding package was perfect. Captured our vision exactly. Highly recommended!"</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="client-info">
+                    <img class="client-avatar" src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Maria Garcia">
+                    <div>
+                        <div class="client-name">Maria Garcia</div>
+                        <div class="client-title">Event Planner</div>
+                    </div>
+                </div>
+                <div class="rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p class="quote">"Flyer designs were stunning! Our event sold out thanks to their eye-catching promotional materials."</p>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="client-info">
+                    <img class="client-avatar" src="https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Robert Taylor">
+                    <div>
+                        <div class="client-name">Robert Taylor</div>
+                        <div class="client-title">Film Producer</div>
+                    </div>
+                </div>
+                <div class="rating">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <p class="quote">"Documentary editing was top-notch. They understood the narrative perfectly. Will hire again."</p>
+            </div>
+        </div>
+        
+        <!-- Stats Summary -->
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">158</div>
+                <div class="stat-label">Total Ratings</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">4.7</div>
+                <div class="stat-label">Average Rating</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Featured Clients</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">150+</div>
+                <div class="stat-label">Happy Clients</div>
+            </div>
+        </div>
+
+        <!-- Submit Rating Form -->
+        <div id="rate" class="rating-form-container">
+            <h3 class="rating-form-title">Rate Your Experience</h3>
+            <form id="ratingForm">
+                <div class="form-group">
+                    <label>Your Rating</label>
+                    <div class="star-rating" id="starRating">
+                        <i class="far fa-star" data-rating="1"></i>
+                        <i class="far fa-star" data-rating="2"></i>
+                        <i class="far fa-star" data-rating="3"></i>
+                        <i class="far fa-star" data-rating="4"></i>
+                        <i class="far fa-star" data-rating="5"></i>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ratingName">Your Name</label>
+                    <input type="text" id="ratingName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ratingEmail">Email (Optional)</label>
+                    <input type="email" id="ratingEmail">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ratingMessage">Your Review</label>
+                    <textarea id="ratingMessage" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-status" id="ratingFormStatus"></div>
+                <button type="submit" class="submit-btn" id="submitRatingBtn">
+                    <i class="fas fa-star"></i> Submit Rating
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 SARR Incorporation — All Services Available • 150+ Happy Clients • 4.7★ Rating</p>
+        <div class="rating-badge" style="margin: 2rem auto; justify-content: center;">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+            <span>4.7 / 5.0 (158 ratings)</span>
+        </div>
+        <div class="social-links">
+            <i class="fab fa-twitter"></i>
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-linkedin"></i>
+            <i class="fab fa-behance"></i>
+            <i class="fab fa-youtube"></i>
+        </div>
+    </footer>
 
     <!-- Notification Toast -->
     <div id="notificationToast" class="notification-toast">
-        <i class="fas fa-check-circle"></i> <span id="toastMessage">Welcome to SARR Digital Agency!</span>
+        <i class="fas fa-check-circle"></i> <span id="toastMessage">Thank you for your rating!</span>
     </div>
 
-    <!-- main content -->
-    <div class="content">
-        <!-- glass navigation -->
-        <nav class="navbar">
-            <div class="logo">SARR <span>Incorporation</span>™</div>
-            <div class="nav-links">
-                <a href="#home">Home</a>
-                <a href="#services">Services</a>
-                <a href="#portfolio">Portfolio</a>
-                <a href="#testimonials">Testimonials</a>
-                <a href="#stats">Stats</a>
-            </div>
-            <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
-        </nav>
-
-        <!-- HOME -->
-        <section id="home" class="hero">
-            <div class="hero-content glass-panel" style="padding: 3.5rem;">
-                <h1>forge <span class="gradient-accent">the future</span><br>with SARR</h1>
-                <p>Premium digital agency offering 30+ creative & technical services. 4.7★ rating from 500+ happy clients.</p>
-                <div class="rating-badge">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                    <span>4.7 / 5.0</span>
-                </div>
-            </div>
-            <div class="parallax-hint"><i class="fas fa-chevron-down"></i></div>
-        </section>
-
-        <!-- SERVICES - Complete List -->
-        <section id="services">
-            <h2><span class="gradient-accent">/services</span></h2>
-            <div class="services-grid">
-                <!-- 2D/3D & Design -->
-                <div class="service-card glass-panel">
-                    <i class="fas fa-cube"></i>
-                    <h3>3D Character Design</h3>
-                    <p>High-quality 3D modeling & character animation</p>
-                    <span class="badge">Popular</span>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-paint-brush"></i>
-                    <h3>2D Animation</h3>
-                    <p>2D character animation & motion graphics</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-pencil-ruler"></i>
-                    <h3>Graphic Design</h3>
-                    <p>Brand identity, print design & illustrations</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-wine-glass-alt"></i>
-                    <h3>Menu Design</h3>
-                    <p>Restaurant menus, catalogs & brochures</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-scroll"></i>
-                    <h3>Flyer Design</h3>
-                    <p>Eye-catching flyers & promotional materials</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-tag"></i>
-                    <h3>Logo Design</h3>
-                    <p>Unique brand logos & visual identity</p>
-                </div>
-                
-                <!-- Video & Animation -->
-                <div class="service-card glass-panel">
-                    <i class="fas fa-robot"></i>
-                    <h3>AI Video Editing</h3>
-                    <p>AI-powered video enhancement & editing</p>
-                    <span class="badge">New</span>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-film"></i>
-                    <h3>Documentary Editing</h3>
-                    <p>Professional documentary post-production</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-ad"></i>
-                    <h3>CGI Ads</h3>
-                    <p>Computer-generated advertising content</p>
-                </div>
-                
-                <!-- Web & Development -->
-                <div class="service-card glass-panel">
-                    <i class="fas fa-code"></i>
-                    <h3>Web Development</h3>
-                    <p>Custom websites & web applications</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-paint-bucket"></i>
-                    <h3>UI/UX Design</h3>
-                    <p>User-centered interface & experience design</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-mobile-alt"></i>
-                    <h3>App Development</h3>
-                    <p>iOS & Android app development</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-gamepad"></i>
-                    <h3>Game Development</h3>
-                    <p>2D & 3D game design and development</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-tools"></i>
-                    <h3>Web Maintenance</h3>
-                    <p>Ongoing website updates & maintenance</p>
-                </div>
-                
-                <!-- Social Media & Marketing -->
-                <div class="service-card glass-panel">
-                    <i class="fas fa-hashtag"></i>
-                    <h3>SMM</h3>
-                    <p>Social media management & content strategy</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-search"></i>
-                    <h3>Web SEO</h3>
-                    <p>Search engine optimization for websites</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fab fa-youtube"></i>
-                    <h3>YouTube SEO</h3>
-                    <p>Video optimization & channel growth</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Digital Marketing</h3>
-                    <p>Comprehensive digital marketing strategies</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fab fa-facebook"></i>
-                    <h3>Meta Ads</h3>
-                    <p>Facebook & Instagram advertising</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fab fa-google"></i>
-                    <h3>Google Ads</h3>
-                    <p>Google search & display advertising</p>
-                </div>
-                
-                <div class="service-card glass-panel">
-                    <i class="fas fa-envelope"></i>
-                    <h3>Email Marketing</h3>
-                    <p>Email campaigns & newsletter design</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- PORTFOLIO with Category Folders -->
-        <section id="portfolio">
-            <h2><span class="gradient-accent">/portfolio</span></h2>
-            
-            <!-- Category Filters -->
-            <div class="category-filters">
-                <button class="category-btn active" data-category="all">All</button>
-                <button class="category-btn" data-category="3d">3D Work</button>
-                <button class="category-btn" data-category="design">Design</button>
-                <button class="category-btn" data-category="video">Video</button>
-                <button class="category-btn" data-category="web">Web Dev</button>
-                <button class="category-btn" data-category="ads">CGI Ads</button>
-            </div>
-            
-            <!-- Portfolio Grid with YouTube Videos & JPEG Images -->
-            <div class="portfolio-grid" id="portfolioGrid">
-                <!-- 3D Category -->
-                <div class="portfolio-item glass-panel" data-category="3d">
-                    <iframe src="https://www.youtube.com/embed/Bc9VzIqWYrs?autoplay=0&mute=1&loop=1&playlist=Bc9VzIqWYrs&controls=0&showinfo=0" allowfullscreen></iframe>
-                    <div class="portfolio-content">
-                        <span class="category">3D Character</span>
-                        <h3>Fantasy Character Design</h3>
-                    </div>
-                </div>
-                
-                <div class="portfolio-item glass-panel" data-category="3d">
-                    <iframe src="https://www.youtube.com/embed/n_GF9N0nIcI?autoplay=0&mute=1&loop=1&playlist=n_GF9N0nIcI&controls=0&showinfo=0" allowfullscreen></iframe>
-                    <div class="portfolio-content">
-                        <span class="category">3D Animation</span>
-                        <h3>Product Visualization</h3>
-                    </div>
-                </div>
-                
-                <!-- Design Category - JPEG Images -->
-                <div class="portfolio-item glass-panel" data-category="design">
-                    <img class="jpeg-image" src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Graphic Design">
-                    <div class="portfolio-content">
-                        <span class="category">Brand Identity</span>
-                        <h3>Luxury Brand Package</h3>
-                    </div>
-                </div>
-                
-                <div class="portfolio-item glass-panel" data-category="design">
-                    <img class="jpeg-image" src="https://images.pexels.com/photos/3768916/pexels-photo-3768916.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Menu Design">
-                    <div class="portfolio-content">
-                        <span class="category">Menu Design</span>
-                        <h3>Restaurant Menu</h3>
-                    </div>
-                </div>
-                
-                <div class="portfolio-item glass-panel" data-category="design">
-                    <img class="jpeg-image" src="https://images.pexels.com/photos/57690/pexels-photo-57690.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Logo Design">
-                    <div class="portfolio-content">
-                        <span class="category">Logo Design</span>
-                        <h3>Tech Startup Logo</h3>
-                    </div>
-                </div>
-                
-                <div class="portfolio-item glass-panel" data-category="design">
-                    <img class="jpeg-image" src="https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Flyer Design">
-                    <div class="portfolio-content">
-                        <span class="category">Flyer Design</span>
-                        <h3>Event Promotion</h3>
-                    </div>
-                </div>
-                
-                <!-- Video Category -->
-                <div class="portfolio-item glass-panel" data-category="video">
-                    <iframe src="https://www.youtube.com/embed/jNQXAC9IVRw?autoplay=0&mute=1&loop=1&playlist=jNQXAC9IVRw&controls=0&showinfo=0" allowfullscreen></iframe>
-                    <div class="portfolio-content">
-                        <span class="category">Documentary</span>
-                        <h3>Short Documentary Edit</h3>
-                    </div>
-                </div>
-                
-                <div class="portfolio-item glass-panel" data-category="video">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&mute=1&loop=1&playlist=dQw4w9WgXcQ&controls=0&showinfo=0" allowfullscreen></iframe>
-                    <div class="portfolio-content">
-                        <span class="category">AI Video</span>
-                        <h3>AI Generated Video</h3>
-                    </div>
-                </div>
-                
-                <!-- Web Dev Category - JPEG Images -->
-                <div class="portfolio-item glass-panel" data-category="web">
-                    <img class="jpeg-image" src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Web Development">
-                    <div class="portfolio-content">
-                        <span class="category">Web Design</span>
-                        <h3>E-commerce Platform</h3>
-                    </div>
-                </div>
-                
-                <div class="portfolio-item glass-panel" data-category="web">
-                    <img class="jpeg-image" src="https://images.pexels.com/photos/57690/pexels-photo-57690.jpeg?auto=compress&cs=tinysrgb&w=600" alt="App Development">
-                    <div class="portfolio-content">
-                        <span class="category">Mobile App</span>
-                        <h3>Fitness App UI</h3>
-                    </div>
-                </div>
-                
-                <!-- CGI Ads Category -->
-                <div class="portfolio-item glass-panel" data-category="ads">
-                    <iframe src="https://www.youtube.com/embed/2g811Eo7K8U?autoplay=0&mute=1&loop=1&playlist=2g811Eo7K8U&controls=0&showinfo=0" allowfullscreen></iframe>
-                    <div class="portfolio-content">
-                        <span class="category">CGI Ad</span>
-                        <h3>Product Commercial</h3>
-                    </div>
-                </div>
-                
-                <div class="portfolio-item glass-panel" data-category="ads">
-                    <iframe src="https://www.youtube.com/embed/RqQn2wY5gBA?autoplay=0&mute=1&loop=1&playlist=RqQn2wY5gBA&controls=0&showinfo=0" allowfullscreen></iframe>
-                    <div class="portfolio-content">
-                        <span class="category">CGI Ad</span>
-                        <h3>Car Commercial</h3>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TESTIMONIALS with Ratings -->
-        <section id="testimonials">
-            <h2><span class="gradient-accent">/clients</span></h2>
-            <div class="testimonials-grid">
-                <div class="testi-card glass-panel">
-                    <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
-                        <img class="client-avatar" src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Client">
-                        <div>
-                            <h4>Sarah Johnson</h4>
-                            <p style="opacity: 0.7;">CEO, TechStart</p>
-                        </div>
-                    </div>
-                    <i class="fas fa-quote-right"></i>
-                    <p>"SARR transformed our brand identity. The 3D character they designed for us became our mascot. Outstanding work!"</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                </div>
-                
-                <div class="testi-card glass-panel">
-                    <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
-                        <img class="client-avatar" src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Client">
-                        <div>
-                            <h4>Michael Chen</h4>
-                            <p style="opacity: 0.7;">Marketing Director</p>
-                        </div>
-                    </div>
-                    <i class="fas fa-quote-right"></i>
-                    <p>"The documentary editing was phenomenal. They captured our story perfectly. Our YouTube views increased by 300%."</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                </div>
-                
-                <div class="testi-card glass-panel">
-                    <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
-                        <img class="client-avatar" src="https://images.pexels.com/photos/1036622/pexels-photo-1036622.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Client">
-                        <div>
-                            <h4>Emma Rodriguez</h4>
-                            <p style="opacity: 0.7;">Restaurant Owner</p>
-                        </div>
-                    </div>
-                    <i class="fas fa-quote-right"></i>
-                    <p>"Menu design and branding services exceeded expectations. Our customers love the new look. Highly recommend!"</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-                    </div>
-                </div>
-                
-                <div class="testi-card glass-panel">
-                    <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
-                        <img class="client-avatar" src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Client">
-                        <div>
-                            <h4>David Kim</h4>
-                            <p style="opacity: 0.7;">Game Developer</p>
-                        </div>
-                    </div>
-                    <i class="fas fa-quote-right"></i>
-                    <p>"The 3D character design for our game was incredible. Professional workflow and quick delivery. 5 stars!"</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- STATS Section -->
-        <section id="stats">
-            <div class="stats-grid">
-                <div class="stat-item glass-panel">
-                    <div class="stat-number">500+</div>
-                    <div class="stat-label">Projects Delivered</div>
-                </div>
-                <div class="stat-item glass-panel">
-                    <div class="stat-number">4.7</div>
-                    <div class="stat-label">Average Rating</div>
-                </div>
-                <div class="stat-item glass-panel">
-                    <div class="stat-number">150+</div>
-                    <div class="stat-label">Happy Clients</div>
-                </div>
-                <div class="stat-item glass-panel">
-                    <div class="stat-number">30+</div>
-                    <div class="stat-label">Services</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer class="glass-panel" style="border-radius: 0;">
-            <p>© 2026 SARR Incorporation — Digital Agency</p>
-            <div class="rating-badge" style="margin: 2rem auto;">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-                <span>4.7 / 5.0 (500+ reviews)</span>
-            </div>
-            <div style="margin-top: 1.5rem; font-size: 2rem; word-spacing: 2rem;">
-                <i class="fab fa-twitter"></i> 
-                <i class="fab fa-instagram"></i> 
-                <i class="fab fa-linkedin"></i> 
-                <i class="fab fa-behance"></i>
-                <i class="fab fa-youtube"></i>
-            </div>
-        </footer>
-    </div>
-
-    <script type="module">
-        // Three.js Background
-        import * as THREE from 'three';
-        
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
-        
-        // Create floating particles
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 2000;
-        const posArray = new Float32Array(particlesCount * 3);
-        
-        for(let i = 0; i < particlesCount * 3; i += 3) {
-            posArray[i] = (Math.random() - 0.5) * 50;
-            posArray[i+1] = (Math.random() - 0.5) * 50;
-            posArray[i+2] = (Math.random() - 0.5) * 50;
-        }
-        
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.05,
-            color: 0x00ffff,
-            transparent: true,
-            opacity: 0.5
-        });
-        
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
-        
-        camera.position.z = 15;
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            particlesMesh.rotation.y += 0.0005;
-            particlesMesh.rotation.x += 0.0002;
-            renderer.render(scene, camera);
-        }
-        
-        animate();
-        
-        // Handle resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
+    <script>
         // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBHPUNdVvUcZZ9XgvtP6M4glcgZPCEoSEc",
@@ -907,67 +1014,181 @@
             projectId: "sarr-incorporation",
             storageBucket: "sarr-incorporation.firebasestorage.app",
             messagingSenderId: "209458463401",
-            appId: "1:209458463401:web:66795a195eb0fd17ef5fb8",
-            measurementId: "G-TS4H3B4M9R"
+            appId: "1:209458463401:web:66795a195eb0fd17ef5fb8"
         };
 
         // Initialize Firebase
+        let db;
         try {
             firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
             console.log("🔥 Firebase initialized");
         } catch (error) {
             console.warn("Firebase init failed:", error);
         }
 
-        // Welcome notification
-        setTimeout(() => {
-            showNotification('✨ Welcome to SARR Digital Agency! Explore our 30+ services.');
-        }, 1000);
-
-        function showNotification(message) {
+        // Show notification function
+        function showNotification(message, isSuccess = true) {
             const toast = document.getElementById('notificationToast');
             const toastMessage = document.getElementById('toastMessage');
             toastMessage.textContent = message;
+            toast.style.borderColor = isSuccess ? '#0ef' : '#ff6b6b';
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
         // Mobile menu
-        document.querySelector('.mobile-toggle').addEventListener('click', ()=>{
-            alert('✨ Services: 3D Design | Video Editing | Web Dev | Digital Marketing | & more!');
+        document.querySelector('.mobile-toggle').addEventListener('click', () => {
+            const navLinks = document.querySelector('.nav-links');
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            } else {
+                navLinks.style.display = 'flex';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '70px';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'rgba(10, 12, 21, 0.95)';
+                navLinks.style.padding = '2rem';
+                navLinks.style.backdropFilter = 'blur(10px)';
+            }
         });
 
-        // Category filtering
-        const categoryBtns = document.querySelectorAll('.category-btn');
-        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        // Star rating functionality
+        let selectedRating = 0;
+        const stars = document.querySelectorAll('.star-rating i');
         
-        categoryBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Update active button
-                categoryBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                // Filter items
-                const category = btn.dataset.category;
-                portfolioItems.forEach(item => {
-                    if (category === 'all' || item.dataset.category === category) {
-                        item.style.display = 'block';
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function() {
+                const rating = parseInt(this.dataset.rating);
+                stars.forEach((s, index) => {
+                    if (index < rating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
                     } else {
-                        item.style.display = 'none';
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseout', function() {
+                stars.forEach((s, index) => {
+                    if (index < selectedRating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+            
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.dataset.rating);
+                stars.forEach((s, index) => {
+                    if (index < selectedRating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
                     }
                 });
             });
         });
 
+        // Handle rating form submission
+        document.getElementById('ratingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formStatus = document.getElementById('ratingFormStatus');
+            const submitBtn = document.getElementById('submitRatingBtn');
+            
+            // Validate rating
+            if (selectedRating === 0) {
+                formStatus.className = 'form-status error';
+                formStatus.textContent = '❌ Please select a rating';
+                return;
+            }
+            
+            const ratingData = {
+                name: document.getElementById('ratingName').value,
+                email: document.getElementById('ratingEmail').value || 'anonymous',
+                rating: selectedRating,
+                message: document.getElementById('ratingMessage').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            submitBtn.disabled = true;
+            formStatus.className = 'form-status';
+            formStatus.textContent = '⏳ Submitting...';
+            
+            try {
+                if (db) {
+                    await db.collection('ratings').add(ratingData);
+                } else {
+                    // Fallback to localStorage
+                    const ratings = JSON.parse(localStorage.getItem('ratings') || '[]');
+                    ratings.push(ratingData);
+                    localStorage.setItem('ratings', JSON.stringify(ratings));
+                }
+                
+                formStatus.className = 'form-status success';
+                formStatus.textContent = '✅ Thank you for your rating!';
+                showNotification('🌟 Rating submitted successfully!');
+                
+                // Reset form
+                this.reset();
+                selectedRating = 0;
+                stars.forEach(s => {
+                    s.classList.remove('fas');
+                    s.classList.add('far');
+                });
+                
+            } catch (error) {
+                console.error('Error:', error);
+                formStatus.className = 'form-status error';
+                formStatus.textContent = '❌ Error submitting rating';
+            } finally {
+                submitBtn.disabled = false;
+                setTimeout(() => {
+                    formStatus.className = 'form-status';
+                    formStatus.textContent = '';
+                }, 5000);
+            }
+        });
+
         // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
+                    // Close mobile menu if open
+                    document.querySelector('.nav-links').style.display = '';
                 }
             });
+        });
+
+        // Welcome notification
+        setTimeout(() => {
+            showNotification('✨ Welcome to SARR Digital Agency! All services available.');
+        }, 1000);
+
+        // Handle window resize for mobile menu
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.querySelector('.nav-links').style.display = 'flex';
+                document.querySelector('.nav-links').style.flexDirection = 'row';
+                document.querySelector('.nav-links').style.position = 'static';
+                document.querySelector('.nav-links').style.padding = '0';
+                document.querySelector('.nav-links').style.background = 'transparent';
+            } else {
+                document.querySelector('.nav-links').style.display = 'none';
+            }
         });
     </script>
 </body>
