@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>SARR Incorporation · Futurist Agency</title>
+    <title>SARR Incorporation · Digital Agency</title>
     <!-- Font & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -31,7 +31,7 @@
             scroll-behavior: smooth; 
         }
         
-        /* Video Background Container */
+        /* YouTube Video Background Container */
         #video-bg-container {
             position: fixed;
             top: 0;
@@ -42,18 +42,24 @@
             overflow: hidden;
         }
         
-        .video-bg {
+        .youtube-bg {
             position: absolute;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .youtube-bg iframe {
+            width: 100vw;
+            height: 56.25vw; /* 16:9 aspect ratio */
+            min-height: 100vh;
+            min-width: 177.77vh; /* 16:9 aspect ratio */
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            object-fit: cover;
-            opacity: 0.4;
-            filter: blur(4px) brightness(0.5);
+            opacity: 0.3;
+            pointer-events: none;
         }
         
         #video-overlay {
@@ -117,188 +123,234 @@
         .hero h1 { font-size: 5.2rem; line-height: 1.1; font-weight: 800; margin-bottom: 1.5rem; }
         .hero p { font-size: 1.3rem; opacity: 0.8; margin-bottom: 2.5rem; max-width: 600px; }
         
-        /* services grid */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
-        .service-card { background: rgba(20, 25, 45, 0.3); backdrop-filter: blur(10px); border: 1px solid rgba(0,200,255,0.2); border-radius: 2rem; padding: 2rem 1.5rem; transition: 0.2s; }
-        .service-card i { font-size: 3rem; color: #0ef; margin-bottom: 1.5rem; }
-        .service-card h3 { font-size: 1.8rem; margin-bottom: 0.8rem; }
+        /* rating badge */
+        .rating-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 255, 255, 0.1);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid #0ef;
+            margin-top: 1rem;
+        }
         
-        /* portfolio grid */
-        .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem; margin: 3rem 0; }
-        .portfolio-item { 
-            aspect-ratio: 16/9; 
-            border-radius: 2rem; 
-            background: rgba(0,0,0,0.3); 
-            backdrop-filter: blur(5px); 
-            border: 1px solid rgba(0,255,255,0.1); 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: flex-end; 
-            padding: 1.8rem; 
-            transition: 0.3s; 
-            box-shadow: 0 20px 30px -20px black;
+        .rating-badge i {
+            color: #ffd700;
+        }
+        
+        .rating-badge span {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        /* services grid - expanded */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .service-card {
+            background: rgba(20, 25, 45, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,200,255,0.2);
+            border-radius: 2rem;
+            padding: 2rem 1.5rem;
+            transition: 0.2s;
             position: relative;
             overflow: hidden;
         }
         
-        .portfolio-video {
+        .service-card::before {
+            content: '';
             position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            z-index: 0;
-            opacity: 0.8;
-            transition: all 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: 0.5s;
         }
         
-        .portfolio-item:hover .portfolio-video {
-            opacity: 1;
-            transform: scale(1.1);
+        .service-card:hover::before {
+            left: 100%;
         }
         
-        .portfolio-content {
+        .service-card i { 
+            font-size: 3rem; 
+            color: #0ef; 
+            margin-bottom: 1.5rem;
+        }
+        
+        .service-card h3 { 
+            font-size: 1.8rem; 
+            margin-bottom: 0.8rem;
+        }
+        
+        .service-card p {
+            color: #a0a8c0;
+            font-size: 0.95rem;
+        }
+        
+        .service-card .badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #0ef;
+            color: #000;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* category folders for portfolio */
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+        
+        .category-btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(0,255,255,0.2);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .category-btn:hover,
+        .category-btn.active {
+            background: #0ef;
+            color: #000;
+            border-color: #0ef;
+            box-shadow: 0 0 20px #0ef;
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .portfolio-item {
+            aspect-ratio: 16/9;
+            border-radius: 2rem;
+            overflow: hidden;
             position: relative;
-            z-index: 1;
-            background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 100%);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            transform: translateY(20px);
-            transition: transform 0.3s;
+            cursor: pointer;
+            border: 1px solid rgba(0,255,255,0.1);
+        }
+        
+        .portfolio-item iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+        
+        .portfolio-item .portfolio-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%);
+            transform: translateY(100%);
+            transition: 0.3s;
         }
         
         .portfolio-item:hover .portfolio-content {
             transform: translateY(0);
         }
         
-        .portfolio-item:hover { 
-            border-color: #0ef; 
-            transform: translateY(-12px) scale(1.02); 
-            box-shadow: 0 30px 50px -20px #00a6ff; 
-        }
-        
-        .portfolio-item .category { 
-            color: #0ef; 
-            font-size: 0.9rem; 
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        
-        .portfolio-item h3 {
-            font-size: 1.5rem;
-            margin-top: 0.5rem;
-        }
-        
-        /* Image styling for AVIF files */
-        .portfolio-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 0;
-            opacity: 0.8;
-            transition: all 0.5s ease;
-        }
-        
-        .portfolio-item:hover .portfolio-image {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-        
-        /* testimonials */
-        .testimonials { display: flex; gap: 2rem; flex-wrap: wrap; }
-        .testi-card { flex: 1 1 280px; padding: 2.5rem 2rem; }
-        .testi-card i { color: #0ef; font-size: 2.5rem; opacity: 0.5; margin-bottom: 1rem; }
-        .testi-card h4 { margin-top: 1.5rem; font-weight: 300; }
-        
-        /* blog with video integration */
-        .blog-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
-        .blog-card { 
-            border-radius: 2rem; 
-            overflow: hidden; 
-            background: rgba(20,20,35,0.25); 
-            backdrop-filter: blur(10px); 
-            border: 1px solid rgba(0,200,255,0.1); 
-            transition: 0.2s;
-            position: relative;
-        }
-        
-        .blog-video-container {
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .blog-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.7;
-            transition: all 0.3s;
-        }
-        
-        .blog-card:hover .blog-video {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-        
-        .blog-card:hover { border-color: #0ef; transform: scale(1.02); }
-        .blog-content { padding: 2rem 1.5rem; position: relative; z-index: 1; }
-        
-        /* contact form */
-        .contact-form { max-width: 700px; margin: 3rem auto 0; padding: 3rem; }
-        .input-group { margin-bottom: 2rem; position: relative; }
-        input, textarea { 
-            width: 100%; 
-            background: rgba(255,255,255,0.03); 
-            border: 1px solid rgba(0,255,255,0.2); 
-            border-radius: 3rem; 
-            padding: 1.2rem 2rem; 
-            font-size: 1.1rem; 
-            color: white; 
-            outline: none; 
-            transition: all 0.3s;
-        }
-        input:focus, textarea:focus { border-color: #0ef; box-shadow: 0 0 20px #00b3ff; }
-        
-        .form-status {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 2rem;
-            text-align: center;
-            display: none;
-        }
-        
-        .form-status.success {
-            background: rgba(0, 255, 0, 0.1);
-            border: 1px solid #00ff00;
-            color: #00ff00;
-            display: block;
-        }
-        
-        .form-status.error {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid #ff0000;
-            color: #ff0000;
-            display: block;
-        }
-        
-        .form-status.loading {
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid #0ef;
+        .portfolio-item .category {
             color: #0ef;
-            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         
-        button[type="submit"] { border: none; font-size: 1.2rem; width: 100%; }
-        button[type="submit"]:disabled {
+        .google-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* testimonials with rating */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .testi-card {
+            padding: 2.5rem 2rem;
+        }
+        
+        .testi-card .rating {
+            color: #ffd700;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+        
+        .testi-card i {
+            color: #0ef;
+            font-size: 2.5rem;
             opacity: 0.5;
-            cursor: not-allowed;
+            margin-bottom: 1rem;
         }
         
+        .testi-card h4 {
+            margin-top: 1.5rem;
+            font-weight: 300;
+        }
+        
+        .client-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid #0ef;
+            margin-right: 1rem;
+            object-fit: cover;
+        }
+        
+        /* stats section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #0ef;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* footer */
         footer { 
             text-align: center; 
             padding: 4rem 8%; 
@@ -339,8 +391,6 @@
         @media (max-width: 1000px) {
             h2 { font-size: 2.8rem; }
             .hero h1 { font-size: 4rem; }
-            .portfolio-grid { grid-template-columns: repeat(2,1fr); }
-            .blog-grid { grid-template-columns: repeat(2,1fr); }
         }
         @media (max-width: 700px) {
             .nav-links { display: none; }
@@ -348,10 +398,6 @@
             section { padding: 3rem 5%; }
             h2 { font-size: 2.2rem; }
             .hero h1 { font-size: 3rem; }
-            .services-grid { grid-template-columns: 1fr; }
-            .portfolio-grid { grid-template-columns: 1fr; }
-            .blog-grid { grid-template-columns: 1fr; }
-            .testimonials { flex-direction: column; }
         }
         
         /* parallax scroll hint */
@@ -366,20 +412,36 @@
             animation: bounce 2s infinite; 
         }
         @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(-10px);} }
+        
+        /* Three.js container */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.3;
+        }
     </style>
 </head>
 <body>
-    <!-- Notification Toast -->
-    <div id="notificationToast" class="notification-toast">
-        <i class="fas fa-envelope"></i> <span id="toastMessage">Message sent successfully!</span>
+    <!-- Three.js Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- YouTube Video Background -->
+    <div id="video-bg-container">
+        <div class="youtube-bg">
+            <!-- Replace with your favorite YouTube video ID -->
+            <iframe src="https://www.youtube.com/embed/2g811Eo7K8U?autoplay=1&mute=1&loop=1&playlist=2g811Eo7K8U&controls=0&showinfo=0&modestbranding=1&iv_load_policy=3&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        <div id="video-overlay"></div>
     </div>
 
-    <!-- Video Background Container -->
-    <div id="video-bg-container">
-        <video class="video-bg" autoplay muted loop playsinline>
-            <source src="file:///D:/pak/1.mp4" type="video/mp4">
-        </video>
-        <div id="video-overlay"></div>
+    <!-- Notification Toast -->
+    <div id="notificationToast" class="notification-toast">
+        <i class="fas fa-check-circle"></i> <span id="toastMessage">Welcome to SARR Digital Agency!</span>
     </div>
 
     <!-- main content -->
@@ -389,415 +451,516 @@
             <div class="logo">SARR <span>Incorporation</span>™</div>
             <div class="nav-links">
                 <a href="#home">Home</a>
-                <a href="#about">About</a>
                 <a href="#services">Services</a>
                 <a href="#portfolio">Portfolio</a>
                 <a href="#testimonials">Testimonials</a>
-                <a href="#blog">Blog</a>
-                <a href="#contact">Contact</a>
+                <a href="#stats">Stats</a>
             </div>
             <div class="mobile-toggle"><i class="fas fa-bars"></i></div>
         </nav>
 
         <!-- HOME -->
         <section id="home" class="hero">
-            <div class="hero-content glass-panel" style="padding: 3.5rem; max-width: 800px;">
+            <div class="hero-content glass-panel" style="padding: 3.5rem;">
                 <h1>forge <span class="gradient-accent">the future</span><br>with SARR</h1>
-                <p>Premium marketing & freelance agency. Immersive video experiences from our exclusive collection.</p>
-                <a href="#contact" class="btn"><i class="fas fa-bolt"></i> ignite project <i class="fas fa-arrow-right"></i></a>
+                <p>Premium digital agency offering 30+ creative & technical services. 4.7★ rating from 500+ happy clients.</p>
+                <div class="rating-badge">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.7 / 5.0</span>
+                </div>
             </div>
             <div class="parallax-hint"><i class="fas fa-chevron-down"></i></div>
         </section>
 
-        <!-- ABOUT -->
-        <section id="about">
-            <h2><span class="gradient-accent">/about</span></h2>
-            <div class="glass-panel" style="padding: 3.5rem; max-width: 1000px;">
-                <p style="font-size: 1.8rem; font-weight: 300;">We are architects of digital desire. Combining cinematic video production, data-driven marketing, and uncompromised creativity operating globally for tomorrow's leaders.</p>
-                <div style="display: flex; gap: 3rem; margin-top: 3rem; flex-wrap: wrap;">
-                    <div><i class="fas fa-video" style="color:#0ef; font-size: 2.5rem;"></i><br><span style="font-size: 2rem;">500+</span> <br>videos</div>
-                    <div><i class="fas fa-globe" style="color:#0ef; font-size: 2.5rem;"></i><br><span style="font-size: 2rem;">20</span> <br>markets</div>
-                    <div><i class="fas fa-award" style="color:#0ef; font-size: 2.5rem;"></i><br><span style="font-size: 2rem;">12</span> <br>awards</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SERVICES -->
+        <!-- SERVICES - Complete List -->
         <section id="services">
             <h2><span class="gradient-accent">/services</span></h2>
             <div class="services-grid">
-                <div class="service-card glass-panel"><i class="fas fa-video"></i><h3>Video Production</h3><p>Cinematic brand stories and high-end commercial content.</p></div>
-                <div class="service-card glass-panel"><i class="fas fa-chart-line"></i><h3>Growth Marketing</h3><p>Performance creative & CRO for exponential scale.</p></div>
-                <div class="service-card glass-panel"><i class="fas fa-pen-fancy"></i><h3>Identity Design</h3><p>Neon-edged brands that dominate culture.</p></div>
-                <div class="service-card glass-panel"><i class="fas fa-code"></i><h3>Futuristic Dev</h3><p>Video-integrated websites with silky animations.</p></div>
+                <!-- 2D/3D & Design -->
+                <div class="service-card glass-panel">
+                    <i class="fas fa-cube"></i>
+                    <h3>3D Character Design</h3>
+                    <p>High-quality 3D modeling & character animation</p>
+                    <span class="badge">Popular</span>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3>2D Animation</h3>
+                    <p>2D character animation & motion graphics</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-pencil-ruler"></i>
+                    <h3>Graphic Design</h3>
+                    <p>Brand identity, print design & illustrations</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-wine-glass-alt"></i>
+                    <h3>Menu Design</h3>
+                    <p>Restaurant menus, catalogs & brochures</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-scroll"></i>
+                    <h3>Flyer Design</h3>
+                    <p>Eye-catching flyers & promotional materials</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-tag"></i>
+                    <h3>Logo Design</h3>
+                    <p>Unique brand logos & visual identity</p>
+                </div>
+                
+                <!-- Video & Animation -->
+                <div class="service-card glass-panel">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI Video Editing</h3>
+                    <p>AI-powered video enhancement & editing</p>
+                    <span class="badge">New</span>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-film"></i>
+                    <h3>Documentary Editing</h3>
+                    <p>Professional documentary post-production</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-ad"></i>
+                    <h3>CGI Ads</h3>
+                    <p>Computer-generated advertising content</p>
+                </div>
+                
+                <!-- Web & Development -->
+                <div class="service-card glass-panel">
+                    <i class="fas fa-code"></i>
+                    <h3>Web Development</h3>
+                    <p>Custom websites & web applications</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-paint-bucket"></i>
+                    <h3>UI/UX Design</h3>
+                    <p>User-centered interface & experience design</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-mobile-alt"></i>
+                    <h3>App Development</h3>
+                    <p>iOS & Android app development</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Game Development</h3>
+                    <p>2D & 3D game design and development</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-tools"></i>
+                    <h3>Web Maintenance</h3>
+                    <p>Ongoing website updates & maintenance</p>
+                </div>
+                
+                <!-- Social Media & Marketing -->
+                <div class="service-card glass-panel">
+                    <i class="fas fa-hashtag"></i>
+                    <h3>SMM</h3>
+                    <p>Social media management & content strategy</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-search"></i>
+                    <h3>Web SEO</h3>
+                    <p>Search engine optimization for websites</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fab fa-youtube"></i>
+                    <h3>YouTube SEO</h3>
+                    <p>Video optimization & channel growth</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Digital Marketing</h3>
+                    <p>Comprehensive digital marketing strategies</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fab fa-facebook"></i>
+                    <h3>Meta Ads</h3>
+                    <p>Facebook & Instagram advertising</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fab fa-google"></i>
+                    <h3>Google Ads</h3>
+                    <p>Google search & display advertising</p>
+                </div>
+                
+                <div class="service-card glass-panel">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email Marketing</h3>
+                    <p>Email campaigns & newsletter design</p>
+                </div>
             </div>
         </section>
 
-        <!-- PORTFOLIO with videos and images from D:\pak -->
+        <!-- PORTFOLIO with Category Folders -->
         <section id="portfolio">
             <h2><span class="gradient-accent">/portfolio</span></h2>
-            <div class="portfolio-grid">
-                <!-- Portfolio Item 1 - 1.mp4 -->
-                <div class="portfolio-item glass-panel">
-                    <video class="portfolio-video" autoplay muted loop playsinline>
-                        <source src="file:///D:/pak/1.mp4" type="video/mp4">
-                    </video>
+            
+            <!-- Category Filters -->
+            <div class="category-filters">
+                <button class="category-btn active" data-category="all">All</button>
+                <button class="category-btn" data-category="3d">3D Work</button>
+                <button class="category-btn" data-category="design">Design</button>
+                <button class="category-btn" data-category="video">Video</button>
+                <button class="category-btn" data-category="web">Web Dev</button>
+                <button class="category-btn" data-category="ads">CGI Ads</button>
+            </div>
+            
+            <!-- Portfolio Grid with YouTube Videos & Google Images -->
+            <div class="portfolio-grid" id="portfolioGrid">
+                <!-- 3D Category -->
+                <div class="portfolio-item glass-panel" data-category="3d">
+                    <iframe src="https://www.youtube.com/embed/Bc9VzIqWYrs?autoplay=0&mute=1&loop=1&playlist=Bc9VzIqWYrs&controls=0&showinfo=0" allowfullscreen></iframe>
                     <div class="portfolio-content">
-                        <span class="category">• CGI Ad</span>
-                        <h3>Blender Drink Commercial 3D</h3>
+                        <span class="category">3D Character</span>
+                        <h3>Fantasy Character Design</h3>
                     </div>
                 </div>
                 
-                <!-- Portfolio Item 2 - 2.mp4 -->
-                <div class="portfolio-item glass-panel">
-                    <video class="portfolio-video" autoplay muted loop playsinline>
-                        <source src="file:///D:/pak/2.mp4" type="video/mp4">
-                    </video>
+                <div class="portfolio-item glass-panel" data-category="3d">
+                    <iframe src="https://www.youtube.com/embed/n_GF9N0nIcI?autoplay=0&mute=1&loop=1&playlist=n_GF9N0nIcI&controls=0&showinfo=0" allowfullscreen></iframe>
                     <div class="portfolio-content">
-                        <span class="category">• YouTube Video</span>
-                        <h3>Documentary Video Editing</h3>
+                        <span class="category">3D Animation</span>
+                        <h3>Product Visualization</h3>
                     </div>
                 </div>
                 
-                <!-- Portfolio Item 3 - 3.mp4 -->
-                <div class="portfolio-item glass-panel">
-                    <video class="portfolio-video" autoplay muted loop playsinline>
-                        <source src="file:///D:/pak/3.mp4" type="video/mp4">
-                    </video>
+                <!-- Design Category - Google Images -->
+                <div class="portfolio-item glass-panel" data-category="design">
+                    <img class="google-image" src="https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=600" alt="Graphic Design">
                     <div class="portfolio-content">
-                        <span class="category">• YouTube Video</span>
-                        <h3>Documentary Video Editing</h3>
+                        <span class="category">Brand Identity</span>
+                        <h3>Luxury Brand Package</h3>
                     </div>
                 </div>
                 
-                <!-- Portfolio Item 4 - 4.mp4 -->
-                <div class="portfolio-item glass-panel">
-                    <video class="portfolio-video" autoplay muted loop playsinline>
-                        <source src="file:///D:/pak/4.mp4" type="video/mp4">
-                    </video>
+                <div class="portfolio-item glass-panel" data-category="design">
+                    <img class="google-image" src="https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600" alt="Menu Design">
                     <div class="portfolio-content">
-                        <span class="category">• CGI Ad</span>
-                        <h3>Perfume Ad</h3>
+                        <span class="category">Menu Design</span>
+                        <h3>Restaurant Menu</h3>
                     </div>
                 </div>
                 
-                <!-- Portfolio Item 5 - 5.mp4 -->
-                <div class="portfolio-item glass-panel">
-                    <video class="portfolio-video" autoplay muted loop playsinline>
-                        <source src="file:///D:/pak/5.mp4" type="video/mp4">
-                    </video>
+                <div class="portfolio-item glass-panel" data-category="design">
+                    <img class="google-image" src="https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=600" alt="Logo Design">
                     <div class="portfolio-content">
-                        <span class="category">• YouTube Video</span>
-                        <h3>Documentary Video Editing</h3>
+                        <span class="category">Logo Design</span>
+                        <h3>Tech Startup Logo</h3>
                     </div>
                 </div>
                 
-                <!-- Portfolio Item 6 - 6.mp4 -->
-                <div class="portfolio-item glass-panel">
-                    <video class="portfolio-video" autoplay muted loop playsinline>
-                        <source src="file:///D:/pak/6.mp4" type="video/mp4">
-                    </video>
+                <div class="portfolio-item glass-panel" data-category="design">
+                    <img class="google-image" src="https://images.unsplash.com/photo-1542744095-291d1f67b221?w=600" alt="Flyer Design">
                     <div class="portfolio-content">
-                        <span class="category">• YouTube Video</span>
-                        <h3>Medical Video</h3>
+                        <span class="category">Flyer Design</span>
+                        <h3>Event Promotion</h3>
                     </div>
                 </div>
-
-                <!-- Portfolio Item 7 - a1.avif (image) -->
-                <div class="portfolio-item glass-panel">
-                    <img class="portfolio-image" src="file:///D:/pak/a1.avif" alt="Flyer Design">
+                
+                <!-- Video Category -->
+                <div class="portfolio-item glass-panel" data-category="video">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&mute=1&loop=1&playlist=dQw4w9WgXcQ&controls=0&showinfo=0" allowfullscreen></iframe>
                     <div class="portfolio-content">
-                        <span class="category">• Graphics Design</span>
-                        <h3>Flyer Design</h3>
+                        <span class="category">Documentary</span>
+                        <h3>Short Documentary Edit</h3>
                     </div>
                 </div>
-
-                <!-- Portfolio Item 8 - a3.avif (image) -->
-                <div class="portfolio-item glass-panel">
-                    <img class="portfolio-image" src="file:///D:/pak/a3.avif" alt="Flyer Design">
+                
+                <div class="portfolio-item glass-panel" data-category="video">
+                    <iframe src="https://www.youtube.com/embed/jNQXAC9IVRw?autoplay=0&mute=1&loop=1&playlist=jNQXAC9IVRw&controls=0&showinfo=0" allowfullscreen></iframe>
                     <div class="portfolio-content">
-                        <span class="category">• Graphics Design</span>
-                        <h3>Flyer Design</h3>
+                        <span class="category">AI Video</span>
+                        <h3>AI Generated Video</h3>
+                    </div>
+                </div>
+                
+                <!-- Web Dev Category -->
+                <div class="portfolio-item glass-panel" data-category="web">
+                    <img class="google-image" src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=600" alt="Web Development">
+                    <div class="portfolio-content">
+                        <span class="category">Web Design</span>
+                        <h3>E-commerce Platform</h3>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item glass-panel" data-category="web">
+                    <img class="google-image" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600" alt="App Development">
+                    <div class="portfolio-content">
+                        <span class="category">Mobile App</span>
+                        <h3>Fitness App UI</h3>
+                    </div>
+                </div>
+                
+                <!-- CGI Ads Category -->
+                <div class="portfolio-item glass-panel" data-category="ads">
+                    <iframe src="https://www.youtube.com/embed/2g811Eo7K8U?autoplay=0&mute=1&loop=1&playlist=2g811Eo7K8U&controls=0&showinfo=0" allowfullscreen></iframe>
+                    <div class="portfolio-content">
+                        <span class="category">CGI Ad</span>
+                        <h3>Product Commercial</h3>
+                    </div>
+                </div>
+                
+                <div class="portfolio-item glass-panel" data-category="ads">
+                    <iframe src="https://www.youtube.com/embed/RqQn2wY5gBA?autoplay=0&mute=1&loop=1&playlist=RqQn2wY5gBA&controls=0&showinfo=0" allowfullscreen></iframe>
+                    <div class="portfolio-content">
+                        <span class="category">CGI Ad</span>
+                        <h3>Car Commercial</h3>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- TESTIMONIALS -->
+        <!-- TESTIMONIALS with Ratings -->
         <section id="testimonials">
             <h2><span class="gradient-accent">/clients</span></h2>
-            <div class="testimonials">
-                <div class="testi-card glass-panel"><i class="fas fa-quote-right"></i><p>"SARR didn't just build a website, they built a universe. Our revenue tripled."</p><h4>— Lena K., CEO of AETHER</h4></div>
-                <div class="testi-card glass-panel"><i class="fas fa-quote-right"></i><p>"The video portfolio wowed our board. Absolute future-proof work."</p><h4>— Marcus V., Creative Director</h4></div>
-                <div class="testi-card glass-panel"><i class="fas fa-quote-right"></i><p>"Every detail oozes premium. They think in 5 dimensions."</p><h4>— Rina S., Founder of ORA</h4></div>
-            </div>
-        </section>
-
-        <!-- BLOG -->
-        <section id="blog">
-            <h2><span class="gradient-accent">/insights</span></h2>
-            <div class="blog-grid">
-                <!-- Blog Post 1 -->
-                <div class="blog-card glass-panel">
-                    <div class="blog-video-container">
-                        <video class="blog-video" autoplay muted loop playsinline>
-                            <source src="file:///D:/pak/1.mp4" type="video/mp4">
-                        </video>
+            <div class="testimonials-grid">
+                <div class="testi-card glass-panel">
+                    <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                        <img class="client-avatar" src="https://images.unsplash.com/photo-1494790108777-466fd6c6a5e3?w=100" alt="Client">
+                        <div>
+                            <h4>Sarah Johnson</h4>
+                            <p style="opacity: 0.7;">CEO, TechStart</p>
+                        </div>
                     </div>
-                    <div class="blog-content">
-                        <span>MAR 2026</span>
-                        <h3>Why Video is the new luxury</h3>
-                        <a href="#" style="color:#0ef;">read →</a>
+                    <i class="fas fa-quote-right"></i>
+                    <p>"SARR transformed our brand identity. The 3D character they designed for us became our mascot. Outstanding work!"</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                     </div>
                 </div>
                 
-                <!-- Blog Post 2 -->
-                <div class="blog-card glass-panel">
-                    <div class="blog-video-container">
-                        <video class="blog-video" autoplay muted loop playsinline>
-                            <source src="file:///D:/pak/2.mp4" type="video/mp4">
-                        </video>
+                <div class="testi-card glass-panel">
+                    <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                        <img class="client-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="Client">
+                        <div>
+                            <h4>Michael Chen</h4>
+                            <p style="opacity: 0.7;">Marketing Director</p>
+                        </div>
                     </div>
-                    <div class="blog-content">
-                        <span>FEB 2026</span>
-                        <h3>Neon gradients in branding</h3>
-                        <a href="#" style="color:#0ef;">read →</a>
+                    <i class="fas fa-quote-right"></i>
+                    <p>"The documentary editing was phenomenal. They captured our story perfectly. Our YouTube views increased by 300%."</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                     </div>
                 </div>
                 
-                <!-- Blog Post 3 -->
-                <div class="blog-card glass-panel">
-                    <div class="blog-video-container">
-                        <video class="blog-video" autoplay muted loop playsinline>
-                            <source src="file:///D:/pak/3.mp4" type="video/mp4">
-                        </video>
+                <div class="testi-card glass-panel">
+                    <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                        <img class="client-avatar" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=100" alt="Client">
+                        <div>
+                            <h4>Emma Rodriguez</h4>
+                            <p style="opacity: 0.7;">Restaurant Owner</p>
+                        </div>
                     </div>
-                    <div class="blog-content">
-                        <span>JAN 2026</span>
-                        <h3>Video-first marketing trends</h3>
-                        <a href="#" style="color:#0ef;">read →</a>
+                    <i class="fas fa-quote-right"></i>
+                    <p>"Menu design and branding services exceeded expectations. Our customers love the new look. Highly recommend!"</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+                
+                <div class="testi-card glass-panel">
+                    <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                        <img class="client-avatar" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100" alt="Client">
+                        <div>
+                            <h4>David Kim</h4>
+                            <p style="opacity: 0.7;">Game Developer</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-quote-right"></i>
+                    <p>"The 3D character design for our game was incredible. Professional workflow and quick delivery. 5 stars!"</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- CONTACT with Firebase Integration -->
-        <section id="contact">
-            <h2><span class="gradient-accent">/connect</span></h2>
-            <div class="contact-form glass-panel">
-                <form id="contactForm">
-                    <div class="input-group">
-                        <input type="text" id="name" placeholder="Your Name / Brand" required>
-                    </div>
-                    <div class="input-group">
-                        <input type="email" id="email" placeholder="Your Email" required>
-                    </div>
-                    <div class="input-group">
-                        <textarea id="message" rows="4" placeholder="Tell us about your vision..." required></textarea>
-                    </div>
-                    <div class="form-status" id="formStatus"></div>
-                    <button type="submit" class="btn" id="submitBtn">
-                        <i class="fas fa-paper-plane"></i> send to future
-                    </button>
-                </form>
+        <!-- STATS Section -->
+        <section id="stats">
+            <div class="stats-grid">
+                <div class="stat-item glass-panel">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Projects Delivered</div>
+                </div>
+                <div class="stat-item glass-panel">
+                    <div class="stat-number">4.7</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="stat-item glass-panel">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Happy Clients</div>
+                </div>
+                <div class="stat-item glass-panel">
+                    <div class="stat-number">30+</div>
+                    <div class="stat-label">Services</div>
+                </div>
             </div>
         </section>
 
         <!-- FOOTER -->
-        <footer class="glass-panel" style="border-radius: 0; backdrop-filter: blur(20px);">
-            <p>© 2026 SARR Incorporation — Video & Marketing Singularity.</p>
+        <footer class="glass-panel" style="border-radius: 0;">
+            <p>© 2026 SARR Incorporation — Digital Agency</p>
+            <div class="rating-badge" style="margin: 2rem auto;">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span>4.7 / 5.0 (500+ reviews)</span>
+            </div>
             <div style="margin-top: 1.5rem; font-size: 2rem; word-spacing: 2rem;">
-                <i class="fab fa-twitter"></i> <i class="fab fa-instagram"></i> <i class="fab fa-linkedin"></i> <i class="fab fa-behance"></i>
+                <i class="fab fa-twitter"></i> 
+                <i class="fab fa-instagram"></i> 
+                <i class="fab fa-linkedin"></i> 
+                <i class="fab fa-behance"></i>
+                <i class="fab fa-youtube"></i>
             </div>
         </footer>
     </div>
 
-    <script>
+    <script type="module">
+        // Three.js Background
+        import * as THREE from 'three';
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        
+        // Create floating particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 2000;
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for(let i = 0; i < particlesCount * 3; i += 3) {
+            posArray[i] = (Math.random() - 0.5) * 50;
+            posArray[i+1] = (Math.random() - 0.5) * 50;
+            posArray[i+2] = (Math.random() - 0.5) * 50;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0x00ffff,
+            transparent: true,
+            opacity: 0.5
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        
+        camera.position.z = 15;
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.0005;
+            particlesMesh.rotation.x += 0.0002;
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
         // Firebase Configuration
-        // TODO: Replace with your Firebase config
         const firebaseConfig = {
-  apiKey: "AIzaSyBHPUNdVvUcZZ9XgvtP6M4glcgZPCEoSEc",
-  authDomain: "sarr-incorporation.firebaseapp.com",
-  projectId: "sarr-incorporation",
-  storageBucket: "sarr-incorporation.firebasestorage.app",
-  messagingSenderId: "209458463401",
-  appId: "1:209458463401:web:66795a195eb0fd17ef5fb8",
-  measurementId: "G-TS4H3B4M9R"
-};
+            apiKey: "AIzaSyBHPUNdVvUcZZ9XgvtP6M4glcgZPCEoSEc",
+            authDomain: "sarr-incorporation.firebaseapp.com",
+            projectId: "sarr-incorporation",
+            storageBucket: "sarr-incorporation.firebasestorage.app",
+            messagingSenderId: "209458463401",
+            appId: "1:209458463401:web:66795a195eb0fd17ef5fb8",
+            measurementId: "G-TS4H3B4M9R"
+        };
+
         // Initialize Firebase
-        let db;
         try {
             firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
-            console.log("🔥 Firebase initialized successfully");
+            console.log("🔥 Firebase initialized");
         } catch (error) {
-            console.warn("⚠️ Firebase initialization failed. Using localStorage fallback.", error);
+            console.warn("Firebase init failed:", error);
         }
 
-        // Notification function
-        function showNotification(message, isSuccess = true) {
+        // Welcome notification
+        setTimeout(() => {
+            showNotification('✨ Welcome to SARR Digital Agency! Explore our 30+ services.');
+        }, 1000);
+
+        function showNotification(message) {
             const toast = document.getElementById('notificationToast');
             const toastMessage = document.getElementById('toastMessage');
             toastMessage.textContent = message;
-            toast.style.borderColor = isSuccess ? '#0ef' : '#ff3366';
             toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 5000);
+            setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
         // Mobile menu
         document.querySelector('.mobile-toggle').addEventListener('click', ()=>{
-            alert('✨ Navigation menu would slide in — premium SARR style ✨');
+            alert('✨ Services: 3D Design | Video Editing | Web Dev | Digital Marketing | & more!');
         });
 
-        // Email validation function
-        function isValidEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
-        // Save to localStorage as fallback
-        function saveToLocalStorage(formData) {
-            const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
-            submissions.push({
-                ...formData,
-                timestamp: new Date().toISOString()
-            });
-            localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
-            console.log('💾 Saved to localStorage:', formData);
-        }
-
-        // Send email using mailto (opens in default email client)
-        function sendEmailViaMailto(formData) {
-            const subject = `New Project Inquiry from ${formData.name}`;
-            const body = `Name: ${formData.name}%0AEmail: ${formData.email}%0A%0AMessage:%0A${formData.message}`;
-            window.location.href = `mailto:sarr.incorporation@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-        }
-
-        // Handle form submission
-        document.getElementById('contactForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const formStatus = document.getElementById('formStatus');
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const message = document.getElementById('message').value.trim();
-            
-            // Validate inputs
-            if (!name || !email || !message) {
-                formStatus.className = 'form-status error';
-                formStatus.textContent = '❌ Please fill in all fields';
-                return;
-            }
-            
-            if (!isValidEmail(email)) {
-                formStatus.className = 'form-status error';
-                formStatus.textContent = '❌ Please enter a valid email address';
-                return;
-            }
-            
-            // Disable button and show loading
-            submitBtn.disabled = true;
-            formStatus.className = 'form-status loading';
-            formStatus.textContent = '⏳ Sending your message...';
-            
-            const formData = {
-                name: name,
-                email: email,
-                message: message,
-                timestamp: new Date().toISOString(),
-                userAgent: navigator.userAgent
-            };
-            
-            try {
-                // Try Firebase first
-                if (db) {
-                    await db.collection('contacts').add(formData);
-                    console.log('✅ Data saved to Firebase');
-                    
-                    // Send email notification
-                    sendEmailViaMailto(formData);
-                    
-                    formStatus.className = 'form-status success';
-                    formStatus.textContent = '✅ Message sent! We\'ll contact you soon.';
-                    showNotification('🚀 Project request received! We\'ll reach out within 24h.');
-                    
-                    // Clear form
-                    document.getElementById('contactForm').reset();
-                } else {
-                    // Fallback to localStorage + email
-                    saveToLocalStorage(formData);
-                    sendEmailViaMailto(formData);
-                    
-                    formStatus.className = 'form-status success';
-                    formStatus.textContent = '✅ Message saved! Email client opened.';
-                    showNotification('📧 Email client opened - please send!');
-                }
-            } catch (error) {
-                console.error('❌ Error:', error);
+        // Category filtering
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+        
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
                 
-                // Fallback to localStorage on error
-                saveToLocalStorage(formData);
-                sendEmailViaMailto(formData);
-                
-                formStatus.className = 'form-status success';
-                formStatus.textContent = '✅ Message saved! Email client opened.';
-                showNotification('📧 Email client opened - please send!');
-            } finally {
-                submitBtn.disabled = false;
-                
-                // Clear status after 5 seconds
-                setTimeout(() => {
-                    formStatus.className = 'form-status';
-                    formStatus.textContent = '';
-                }, 5000);
-            }
-        });
-
-        // Video and image loading verification
-        document.addEventListener('DOMContentLoaded', function() {
-            const mediaElements = document.querySelectorAll('video, img');
-            console.log(`Found ${mediaElements.length} media elements on page`);
-            
-            mediaElements.forEach((element, index) => {
-                if (element.tagName === 'VIDEO') {
-                    element.addEventListener('loadeddata', function() {
-                        console.log(`✅ Video ${index + 1} loaded:`, element.currentSrc);
-                    });
-                    
-                    element.addEventListener('error', function(e) {
-                        console.warn(`❌ Video ${index + 1} failed:`, element.currentSrc);
-                        // Add fallback background
-                        element.style.background = 'linear-gradient(45deg, #1a1a2e, #16213e)';
-                    });
-                } else if (element.tagName === 'IMG') {
-                    element.addEventListener('load', function() {
-                        console.log(`✅ Image ${index + 1} loaded:`, element.src);
-                    });
-                    
-                    element.addEventListener('error', function() {
-                        console.warn(`❌ Image ${index + 1} failed:`, element.src);
-                        // Add fallback background
-                        element.style.background = 'linear-gradient(45deg, #1a1a2e, #16213e)';
-                        element.style.opacity = '0.5';
-                    });
-                }
+                // Filter items
+                const category = btn.dataset.category;
+                portfolioItems.forEach(item => {
+                    if (category === 'all' || item.dataset.category === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
             });
         });
 
-        // Smooth scrolling for anchor links
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         });
